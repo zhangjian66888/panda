@@ -75,7 +75,8 @@ public class CodeGenerator {
 
         // 包配置
         final PackageConfig pc = new PackageConfig();
-        pc.setModuleName(scanner("模块名"));
+//        pc.setModuleName(scanner("模块名"));
+        pc.setModuleName("core");
         pc.setParent("com.panda");
         mpg.setPackageInfo(pc);
 
@@ -126,7 +127,7 @@ public class CodeGenerator {
 //        strategy.setRestControllerStyle(false);
 //        strategy.setSuperControllerClass("com.panda.common.Controller.BaseController");
 //        strategy.setInclude(scanner("表名，多个英文逗号分割").split(","));
-        strategy.setInclude("panda_code".split(","));
+        strategy.setInclude("panda_group,panda_group_role,panda_group_user,panda_permission,panda_role,panda_role_permission,panda_user,panda_user_role".split(","));
         strategy.setSuperEntityColumns("id");
         strategy.setControllerMappingHyphenStyle(true);
         strategy.setTablePrefix(pc.getModuleName() + "_");
