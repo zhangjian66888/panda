@@ -1,13 +1,11 @@
 package com.panda.core.service;
 
-import com.baomidou.mybatisplus.core.conditions.Wrapper;
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.panda.common.dto.BaseDto;
 import com.panda.common.dto.BaseSo;
 import com.panda.common.dto.PageDto;
 import com.panda.common.entity.BaseEntity;
 
-import java.io.Serializable;
 import java.util.List;
 
 /**

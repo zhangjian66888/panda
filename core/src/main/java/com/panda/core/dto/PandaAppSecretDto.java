@@ -22,9 +22,9 @@ import lombok.experimental.Accessors;
 @AllArgsConstructor
 public class PandaAppSecretDto extends BaseDto {
 
-    private Integer appCode;
+    private Long appCode;
 
-    private Integer envCode;
+    private Long envCode;
 
     private String envProfile;
 

@@ -21,7 +21,7 @@ public class PandaAppDto extends BaseDto {
 
     private String appName;
     private String appAlias;
-    private Integer appCode;
+    private Long appCode;
     private Integer appLevel;
     private Long businessLineId;
     private String businessLineName;

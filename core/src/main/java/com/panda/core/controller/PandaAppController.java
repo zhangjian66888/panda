@@ -53,7 +53,7 @@ public class PandaAppController extends BaseController<PandaApp, PandaAppDto, Pa
 
     @GetMapping("/token")
     @ResponseBody
-    public StatusDto token(@RequestParam("appCode") Integer appCode) {
+    public StatusDto token(@RequestParam("appCode") Long appCode) {
         return StatusDto.SUCCESS().setData(iPandaAppService.tokenByAppCode(appCode));
     }
 }

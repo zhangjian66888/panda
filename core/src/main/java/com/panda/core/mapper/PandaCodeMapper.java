@@ -14,6 +14,6 @@ import org.apache.ibatis.annotations.Param;
  */
 public interface PandaCodeMapper extends BaseMapper<PandaCode> {
 
-    int increase (@Param("id")Long id, @Param("codeValue") Integer codeValue);
+    int increase (@Param("id")Long id, @Param("codeValue") Long codeValue);
 
 }

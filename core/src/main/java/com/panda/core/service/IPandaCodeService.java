@@ -16,8 +16,8 @@ import com.panda.core.entity.PandaCode;
 public interface IPandaCodeService extends IBaseService<PandaCode, PandaCodeDto, PandaCodeSo> {
 
 
-    int obtainCode(String type);
+    long obtainCode(String type);
 
-    int obtainCode(CodeType codeType);
+    long obtainCode(CodeType codeType);
 
 }

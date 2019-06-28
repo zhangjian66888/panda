@@ -26,6 +26,10 @@ public class PandaPermission extends BaseEntity {
 
     private String showName;
 
+    private Long businessLineId;
+
+    private Long appCode;
+
     private String url;
 
     private String method;

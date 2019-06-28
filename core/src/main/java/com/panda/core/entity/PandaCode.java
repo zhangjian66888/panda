@@ -28,6 +28,6 @@ public class PandaCode extends BaseEntity {
 
     private String codeType;
 
-    private Integer codeValue;
+    private Long codeValue;
 
 }

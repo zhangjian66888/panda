@@ -15,8 +15,9 @@ import java.util.List;
  * @author zhanglijian
  * @since 2019-06-03
  */
-public interface IPandaAppService extends IBaseService<PandaApp, PandaAppDto, PandaAppSo> {
+public interface IPandaAppService extends IBaseService<PandaApp, PandaAppDto, PandaAppSo>,
+        ISelectItem<PandaAppSo> {
 
-    List<PandaAppSecretDto> tokenByAppCode(Integer code);
+    List<PandaAppSecretDto> tokenByAppCode(Long code);
 
 }

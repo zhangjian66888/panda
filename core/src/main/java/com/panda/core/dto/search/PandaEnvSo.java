@@ -21,6 +21,6 @@ import lombok.NoArgsConstructor;
 public class PandaEnvSo extends BaseSo {
 
     private String envName;
-    private Integer envCode;
+    private Long envCode;
     private String envProfile;
 }

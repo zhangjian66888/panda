@@ -24,6 +24,14 @@ public class PandaPermissionDto extends BaseDto {
 
     private String showName;
 
+    private Long businessLineId;
+
+    private String businessLineName;
+
+    private Long appCode;
+
+    private String appName;
+
     private String url;
 
     private String method;

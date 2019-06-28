@@ -1,6 +1,5 @@
 package com.panda.core.service.impl;
 
-import com.baomidou.mybatisplus.core.conditions.Wrapper;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
@@ -10,6 +9,7 @@ import com.google.common.collect.Lists;
 import com.panda.common.dto.BaseDto;
 import com.panda.common.dto.BaseSo;
 import com.panda.common.dto.PageDto;
+import com.panda.common.dto.SelectItemDto;
 import com.panda.common.entity.BaseEntity;
 import com.panda.common.enums.DelState;
 import com.panda.common.enums.SortOrder;
@@ -17,8 +17,11 @@ import com.panda.common.util.BeanUtil;
 import com.panda.common.util.ClassUtil;
 import com.panda.common.util.ParseUtils;
 import com.panda.core.service.IBaseService;
+import com.panda.core.service.ISelectItem;
+import org.springframework.util.ReflectionUtils;
 import org.springframework.util.StringUtils;
 
+import java.lang.reflect.Method;
 import java.lang.reflect.ParameterizedType;
 import java.time.LocalDateTime;
 import java.util.List;
@@ -34,7 +37,7 @@ import java.util.stream.Collectors;
  * @author zhanglijian.
  */
 public class BaseServiceImpl<M extends BaseMapper<E>, E extends BaseEntity, D extends BaseDto, S extends BaseSo>
-        extends ServiceImpl<M, E> implements IBaseService<E, D, S> {
+        extends ServiceImpl<M, E> implements IBaseService<E, D, S>, ISelectItem<S> {
 
 
     private Class<E> clzE;
@@ -132,5 +135,49 @@ public class BaseServiceImpl<M extends BaseMapper<E>, E extends BaseEntity, D ex
         return Optional.ofNullable(list).orElse(Lists.newArrayList())
                 .stream().map(t -> BeanUtil.transBean(t, clzD)).collect(Collectors.toList());
 
+    }
+
+    @Override
+    public List<SelectItemDto> selectItem(boolean all) {
+        return selectItem(all, null);
+    }
+
+    @Override
+    public List<SelectItemDto> selectItem(boolean all, S s) {
+
+        E query = null;
+        if (Objects.nonNull(s)) {
+            query = BeanUtil.transBean(s, clzE);
+        } else {
+            query = ClassUtil.newInstance(clzE);
+        }
+        query.setDelState(DelState.NO.getId());
+        QueryWrapper<E> queryWrapper = new QueryWrapper<>(query);
+        String[] columns = selectItemField();
+        String id = ParseUtils.camelToUnderline(columns[0]);
+        String value = ParseUtils.camelToUnderline(columns[1]);
+        queryWrapper.select(id, value);
+
+        Method idMethod = ReflectionUtils.findMethod(clzE, "get" + StringUtils.capitalize(columns[0]));
+        Method valueMethod = ReflectionUtils.findMethod(clzE, "get" + StringUtils.capitalize(columns[1]));
+
+        List<SelectItemDto> list = Optional.ofNullable(list(queryWrapper)).orElse(Lists.newArrayList())
+                .stream()
+                .map(t -> {
+                    SelectItemDto selectItem = new SelectItemDto();
+                    selectItem.setId((Long) ReflectionUtils.invokeMethod(idMethod, t));
+                    selectItem.setValue((String) ReflectionUtils.invokeMethod(valueMethod, t));
+                    return selectItem;
+                })
+                .collect(Collectors.toList());
+        if (all) {
+            list.add(0, SelectItemDto.builder().value("全部").build());
+        }
+        return list;
+    }
+
+    @Override
+    public String[] selectItemField() {
+        return new String[]{"id", "name"};
     }
 }

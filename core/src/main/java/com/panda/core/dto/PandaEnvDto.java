@@ -21,6 +21,6 @@ import lombok.NoArgsConstructor;
 public class PandaEnvDto extends BaseDto {
 
     private String envName;
-    private Integer envCode;
+    private Long envCode;
     private String envProfile;
 }

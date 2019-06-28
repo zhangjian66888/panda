@@ -24,7 +24,7 @@ public class PandaEnv extends BaseEntity {
 
     private String envName;
 
-    private Integer envCode;
+    private Long envCode;
 
     private String envProfile;
 }

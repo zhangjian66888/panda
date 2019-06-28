@@ -32,7 +32,7 @@ public class PandaApp extends BaseEntity {
      */
     private String appAlias;
 
-    private Integer appCode;
+    private Long appCode;
 
     private Integer appLevel;
 

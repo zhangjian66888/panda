@@ -22,6 +22,18 @@ public class PandaRoleDto extends BaseDto {
 
     private String roleName;
 
+    private Long businessLineId;
+
+    private String businessLineName;
+
+    private Long appCode;
+
+    private String appName;
+
+    private Long envCode;
+
+    private String envName;
+
     private String description;
 
 }

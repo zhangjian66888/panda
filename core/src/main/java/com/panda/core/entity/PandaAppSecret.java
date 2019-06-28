@@ -22,9 +22,9 @@ import lombok.experimental.Accessors;
 @Accessors(chain = true)
 public class PandaAppSecret extends BaseEntity {
 
-    private Integer appCode;
+    private Long appCode;
 
-    private Integer envCode;
+    private Long envCode;
 
     private String envProfile;
 

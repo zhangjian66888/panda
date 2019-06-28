@@ -24,6 +24,12 @@ public class PandaRole extends BaseEntity {
 
     private String roleName;
 
+    private Long businessLineId;
+
+    private Long appCode;
+
+    private Long envCode;
+
     private String description;
 
 }

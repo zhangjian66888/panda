@@ -40,11 +40,11 @@ public class SelectItemUtil {
             Object[] values = clazz.getEnumConstants();
             if (Objects.nonNull(values)) {
                 Method getId = clazz.getMethod("getId");
-                Method getName = clazz.getMethod("getName");
+                Method getValue = clazz.getMethod("getValue");
                 for (Object value : values) {
                     SelectItemDto seleteItem = SelectItemDto.builder()
                             .id(Long.valueOf(getId.invoke(value).toString()))
-                            .value((String) getName.invoke(value))
+                            .value((String) getValue.invoke(value))
                             .build();
                     seleteItemDtos.add(seleteItem);
                 }
