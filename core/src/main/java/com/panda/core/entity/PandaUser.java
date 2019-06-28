@@ -24,6 +24,8 @@ public class PandaUser extends BaseEntity {
 
     private String username;
 
+    private Integer userType;
+
     private String password;
 
     private String zhName;

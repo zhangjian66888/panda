@@ -28,13 +28,11 @@ public class PandaPermissionDto extends BaseDto {
 
     private String method;
 
-    private Integer menuId;
-
     private Integer type;
 
     private String action;
 
-    private Boolean menuType;
+    private Integer menuType;
 
     private Long parentId;
 

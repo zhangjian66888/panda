@@ -28,19 +28,9 @@ public class PandaPermissionSo extends BaseSo {
 
     private String method;
 
-    private Integer menuId;
-
     private Integer type;
 
     private String action;
 
     private Boolean menuType;
-
-    private Long parentId;
-
-    private String menuIcon;
-
-    private Integer menuSequence;
-
-    private String description;
 }

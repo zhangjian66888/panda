@@ -22,6 +22,8 @@ public class PandaUserDto extends BaseDto {
 
     private String username;
 
+    private Integer userType;
+
     private String password;
 
     private String zhName;
@@ -29,4 +31,5 @@ public class PandaUserDto extends BaseDto {
     private String mobile;
 
     private String email;
+
 }

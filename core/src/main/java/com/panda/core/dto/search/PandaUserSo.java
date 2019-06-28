@@ -20,9 +20,9 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class PandaUserSo extends BaseSo {
 
-    private String username;
+    private Integer userType;
 
-    private String password;
+    private String username;
 
     private String zhName;
 

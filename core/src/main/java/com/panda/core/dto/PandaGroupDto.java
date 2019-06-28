@@ -24,4 +24,6 @@ public class PandaGroupDto extends BaseDto {
 
     private Long businessLineId;
 
+    private String businessLineName;
+
 }
