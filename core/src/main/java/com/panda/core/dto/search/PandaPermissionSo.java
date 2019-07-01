@@ -24,6 +24,10 @@ public class PandaPermissionSo extends BaseSo {
 
     private String showName;
 
+    private Long businessLineId;
+
+    private Long appCode;
+
     private String url;
 
     private String method;
@@ -32,5 +36,5 @@ public class PandaPermissionSo extends BaseSo {
 
     private String action;
 
-    private Boolean menuType;
+    private Integer menuType;
 }

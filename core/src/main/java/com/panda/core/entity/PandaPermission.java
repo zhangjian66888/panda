@@ -38,7 +38,7 @@ public class PandaPermission extends BaseEntity {
 
     private String action;
 
-    private Boolean menuType;
+    private Integer menuType;
 
     private Long parentId;
 
