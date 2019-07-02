@@ -40,11 +40,11 @@ public class PandaAppController extends BaseController<PandaApp, PandaAppDto, Pa
     private IPandaAppService iPandaAppService;
 
     @Autowired
-    private IPandaBusinessLineService pandaBusinessLineService;
+    private IPandaBusinessLineService iPandaBusinessLineService;
 
     @Override
     protected List<PandaAppDto> decorateList(List<PandaAppDto> list) {
-        List<SelectItemDto> lines = pandaBusinessLineService.selectItem(false);
+        List<SelectItemDto> lines = iPandaBusinessLineService.selectItem(false);
         for (PandaAppDto dto : list) {
             dto.setBusinessLineName(SelectItemUtil.getValueById(dto.getBusinessLineId(), lines));
         }

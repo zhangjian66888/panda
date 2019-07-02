@@ -120,13 +120,13 @@ public class BaseServiceImpl<M extends BaseMapper<E>, E extends BaseEntity, D ex
     }
 
     @Override
-    public List<D> selectAll() {
+    public List<D> findAll() {
         D query = ClassUtil.newInstance(clzD);
-        return select(query);
+        return find(query);
     }
 
     @Override
-    public List<D> select(D dto) {
+    public List<D> find(D dto) {
         E query = BeanUtil.transBean(dto, clzE);
         query.setDelState(DelState.NO.getId());
         QueryWrapper<E> queryWrapper = new QueryWrapper<>(query);
@@ -135,6 +135,25 @@ public class BaseServiceImpl<M extends BaseMapper<E>, E extends BaseEntity, D ex
         return Optional.ofNullable(list).orElse(Lists.newArrayList())
                 .stream().map(t -> BeanUtil.transBean(t, clzD)).collect(Collectors.toList());
 
+    }
+
+    @Override
+    public List<D> findListByIds(List<Long> ids) {
+        E query = ClassUtil.newInstance(clzE);
+        query.setDelState(DelState.NO.getId());
+        QueryWrapper<E> queryWrapper = new QueryWrapper<>(query);
+        queryWrapper.in("id", ids);
+        queryWrapper.select(findListByIdsField());
+        queryWrapper.nonEmptyOfEntity();
+        List<E> list = super.list(queryWrapper);
+        return Optional.ofNullable(list).orElse(Lists.newArrayList())
+                .stream().map(t -> BeanUtil.transBean(t, clzD)).collect(Collectors.toList());
+
+    }
+
+    @Override
+    public String[] findListByIdsField() {
+        return null;
     }
 
     @Override

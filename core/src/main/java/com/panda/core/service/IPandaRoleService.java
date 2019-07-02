@@ -1,8 +1,11 @@
 package com.panda.core.service;
 
 import com.panda.core.dto.PandaRoleDto;
+import com.panda.core.dto.PandaRolePermissionDto;
 import com.panda.core.dto.search.PandaRoleSo;
 import com.panda.core.entity.PandaRole;
+
+import java.util.List;
 
 /**
  * <p>
@@ -13,5 +16,11 @@ import com.panda.core.entity.PandaRole;
  * @since 2019-06-26
  */
 public interface IPandaRoleService extends IBaseService<PandaRole, PandaRoleDto, PandaRoleSo> {
+
+    List<PandaRolePermissionDto> selectedByRoleId(Long roleId);
+
+    int savePermission(PandaRolePermissionDto dto);
+
+    int deletePermission(PandaRolePermissionDto dto);
 
 }

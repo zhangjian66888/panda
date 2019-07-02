@@ -27,7 +27,11 @@ public interface IBaseService<E extends BaseEntity, D extends BaseDto, S extends
 
     boolean insertBatch(List<D> dtos);
 
-    List<D> selectAll();
+    List<D> findAll();
 
-    List<D> select(D dto);
+    List<D> find(D dto);
+
+    List<D> findListByIds(List<Long> ids);
+
+    String[] findListByIdsField();
 }

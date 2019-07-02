@@ -38,9 +38,13 @@ public class PandaPermissionDto extends BaseDto {
 
     private Integer type;
 
+    private String typeShow;
+
     private String action;
 
     private Integer menuType;
+
+    private String menuTypeShow;
 
     private Long parentId;
 

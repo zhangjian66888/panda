@@ -22,5 +22,11 @@ public class PandaRolePermissionDto extends BaseDto {
 
     private Long roleId;
 
+    private String roleName;
+
     private Long permissionId;
+
+    private String permissionName;
+
+    private String permissionShowName;
 }

@@ -7,6 +7,8 @@ import com.panda.core.mapper.PandaPermissionMapper;
 import com.panda.core.service.IPandaPermissionService;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 /**
  * <p>
  * 服务实现类
@@ -20,4 +22,8 @@ public class PandaPermissionServiceImpl
         extends BaseServiceImpl<PandaPermissionMapper, PandaPermission, PandaPermissionDto, PandaPermissionSo>
         implements IPandaPermissionService {
 
+    @Override
+    public String[] findListByIdsField() {
+        return new String[]{"id", "name", "show_name"};
+    }
 }

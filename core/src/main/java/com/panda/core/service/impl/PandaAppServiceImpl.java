@@ -50,7 +50,7 @@ public class PandaAppServiceImpl extends BaseServiceImpl<PandaAppMapper, PandaAp
         if (Objects.nonNull(entity.getId())) {
             return updateById(entity);
         } else {
-            List<PandaEnvDto> envs = iPandaEnvService.selectAll();
+            List<PandaEnvDto> envs = iPandaEnvService.findAll();
             long code = iPandaCodeService.obtainCode(CodeType.APP.getValue());
             entity.setAppCode(code);
             save(entity);
@@ -60,7 +60,7 @@ public class PandaAppServiceImpl extends BaseServiceImpl<PandaAppMapper, PandaAp
     }
 
     public void generateToken(Long appCode) {
-        List<PandaEnvDto> envs = iPandaEnvService.selectAll();
+        List<PandaEnvDto> envs = iPandaEnvService.findAll();
         List<PandaAppSecretDto> tokens = Lists.newArrayList();
         for (PandaEnvDto env : envs) {
             PandaAppSecretDto token = new PandaAppSecretDto();
@@ -76,7 +76,7 @@ public class PandaAppServiceImpl extends BaseServiceImpl<PandaAppMapper, PandaAp
     @Override
     public List<PandaAppSecretDto> tokenByAppCode(Long code) {
 
-        List<PandaEnvDto> envs = iPandaEnvService.selectAll();
+        List<PandaEnvDto> envs = iPandaEnvService.findAll();
         Map<String, PandaAppSecretDto> map = envs.stream()
                 .collect(Collectors.toMap(t -> t.getEnvProfile(),
                         t -> PandaAppSecretDto.builder()
@@ -87,7 +87,7 @@ public class PandaAppServiceImpl extends BaseServiceImpl<PandaAppMapper, PandaAp
             setDelState(DelState.NO.getId());
             setAppCode(code);
         }};
-        List<PandaAppSecretDto> tokens = iPandaAppSecretService.select(tokenQuery);
+        List<PandaAppSecretDto> tokens = iPandaAppSecretService.find(tokenQuery);
         for (PandaAppSecretDto token : tokens) {
             Optional.ofNullable(map.get(token.getEnvProfile())).ifPresent(t ->
                     t.setSecret(token.getSecret()));
