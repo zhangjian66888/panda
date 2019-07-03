@@ -20,6 +20,8 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class PandaUserSo extends BaseSo {
 
+    private Long businessLineId;
+
     private Integer userType;
 
     private String username;

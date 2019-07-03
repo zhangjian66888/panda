@@ -22,6 +22,8 @@ import lombok.experimental.Accessors;
 @Accessors(chain = true)
 public class PandaUser extends BaseEntity {
 
+    private Long businessLineId;
+
     private String username;
 
     private Integer userType;

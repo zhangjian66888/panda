@@ -13,5 +13,4 @@ import com.panda.core.entity.PandaUserRole;
  * @since 2019-06-26
  */
 public interface IPandaUserRoleService extends IBaseService<PandaUserRole, PandaUserRoleDto, PandaUserRoleSo> {
-
 }

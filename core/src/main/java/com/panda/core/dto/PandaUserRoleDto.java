@@ -24,4 +24,6 @@ public class PandaUserRoleDto extends BaseDto {
 
     private Long roleId;
 
+    private String roleName;
+
 }

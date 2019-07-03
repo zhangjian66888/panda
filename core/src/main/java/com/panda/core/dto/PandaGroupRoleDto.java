@@ -23,4 +23,6 @@ public class PandaGroupRoleDto extends BaseDto {
     private Long groupId;
 
     private Long roleId;
+
+    private String roleName;
 }

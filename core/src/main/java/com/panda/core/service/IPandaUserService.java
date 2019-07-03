@@ -1,8 +1,11 @@
 package com.panda.core.service;
 
 import com.panda.core.dto.PandaUserDto;
+import com.panda.core.dto.PandaUserRoleDto;
 import com.panda.core.dto.search.PandaUserSo;
 import com.panda.core.entity.PandaUser;
+
+import java.util.List;
 
 /**
  * <p>
@@ -14,4 +17,10 @@ import com.panda.core.entity.PandaUser;
  */
 public interface IPandaUserService extends IBaseService<PandaUser, PandaUserDto, PandaUserSo> {
 
+
+    List<PandaUserRoleDto> selectedByUserId(Long userId);
+
+    int saveRole(PandaUserRoleDto dto);
+
+    int deleteRole(PandaUserRoleDto dto);
 }

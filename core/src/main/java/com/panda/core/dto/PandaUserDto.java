@@ -20,9 +20,13 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class PandaUserDto extends BaseDto {
 
+    private Long businessLineId;
+    private String businessLineName;
+
     private String username;
 
     private Integer userType;
+    private String userTypeShow;
 
     private String password;
 
