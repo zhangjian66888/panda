@@ -19,7 +19,7 @@ import org.springframework.web.bind.annotation.RestController;
  */
 @Controller
 @RestController
-@RequestMapping(CoreConst.MAIN_REQUEST_PREFIX + "app/token")
-public class PandaAppTokenController extends BaseController<PandaAppSecret, PandaAppSecretDto, PandaAppSecretSo> {
+@RequestMapping(CoreConst.MAIN_REQUEST_PREFIX + "app/secret")
+public class PandaAppSecretController extends BaseController<PandaAppSecret, PandaAppSecretDto, PandaAppSecretSo> {
 
 }

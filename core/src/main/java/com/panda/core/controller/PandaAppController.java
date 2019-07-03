@@ -7,6 +7,7 @@ import com.panda.common.enums.DelState;
 import com.panda.common.util.SelectItemUtil;
 import com.panda.core.consts.CoreConst;
 import com.panda.core.dto.PandaAppDto;
+import com.panda.core.dto.PandaAppSecretDto;
 import com.panda.core.dto.search.PandaAppSo;
 import com.panda.core.entity.PandaApp;
 import com.panda.core.entity.PandaBusinessLine;
@@ -51,9 +52,16 @@ public class PandaAppController extends BaseController<PandaApp, PandaAppDto, Pa
         return super.decorateList(list);
     }
 
-    @GetMapping("/token")
+    @GetMapping("/secrets")
     @ResponseBody
-    public StatusDto token(@RequestParam("appCode") Long appCode) {
-        return StatusDto.SUCCESS().setData(iPandaAppService.tokenByAppCode(appCode));
+    public StatusDto secret(@RequestParam("appCode") Long appCode) {
+        return StatusDto.SUCCESS().setData(iPandaAppService.secretByAppCode(appCode));
     }
+
+    @PostMapping("/flushSecret")
+    @ResponseBody
+    public StatusDto flushSecret(@Valid @RequestBody PandaAppSecretDto dto) {
+        return StatusDto.SUCCESS().setData(iPandaAppService.flushSecret(dto));
+    }
+
 }

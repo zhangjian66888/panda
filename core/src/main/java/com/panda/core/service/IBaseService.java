@@ -31,6 +31,8 @@ public interface IBaseService<E extends BaseEntity, D extends BaseDto, S extends
 
     List<D> find(D dto);
 
+    D findOne(D dto);
+
     List<D> findListByIds(List<Long> ids);
 
     String[] findListByIdsField();

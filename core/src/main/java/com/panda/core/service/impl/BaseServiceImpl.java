@@ -138,6 +138,11 @@ public class BaseServiceImpl<M extends BaseMapper<E>, E extends BaseEntity, D ex
     }
 
     @Override
+    public D findOne(D dto) {
+        return find(dto).stream().findFirst().orElse(null);
+    }
+
+    @Override
     public List<D> findListByIds(List<Long> ids) {
         E query = ClassUtil.newInstance(clzE);
         query.setDelState(DelState.NO.getId());

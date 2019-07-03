@@ -18,6 +18,8 @@ import java.util.List;
 public interface IPandaAppService extends IBaseService<PandaApp, PandaAppDto, PandaAppSo>,
         ISelectItem<PandaAppSo> {
 
-    List<PandaAppSecretDto> tokenByAppCode(Long code);
+    List<PandaAppSecretDto> secretByAppCode(Long code);
+
+    String flushSecret(PandaAppSecretDto dto);
 
 }

@@ -50,7 +50,6 @@ public class PandaAppServiceImpl extends BaseServiceImpl<PandaAppMapper, PandaAp
         if (Objects.nonNull(entity.getId())) {
             return updateById(entity);
         } else {
-            List<PandaEnvDto> envs = iPandaEnvService.findAll();
             long code = iPandaCodeService.obtainCode(CodeType.APP.getValue());
             entity.setAppCode(code);
             save(entity);
@@ -74,12 +73,13 @@ public class PandaAppServiceImpl extends BaseServiceImpl<PandaAppMapper, PandaAp
     }
 
     @Override
-    public List<PandaAppSecretDto> tokenByAppCode(Long code) {
+    public List<PandaAppSecretDto> secretByAppCode(Long code) {
 
         List<PandaEnvDto> envs = iPandaEnvService.findAll();
         Map<String, PandaAppSecretDto> map = envs.stream()
                 .collect(Collectors.toMap(t -> t.getEnvProfile(),
                         t -> PandaAppSecretDto.builder()
+                                .appCode(code)
                                 .envCode(t.getEnvCode())
                                 .envProfile(t.getEnvProfile())
                                 .build()));
@@ -99,5 +99,13 @@ public class PandaAppServiceImpl extends BaseServiceImpl<PandaAppMapper, PandaAp
     @Override
     public String[] selectItemField() {
         return new String[]{"appCode", "appName"};
+    }
+
+
+    @Override
+    public String flushSecret(PandaAppSecretDto dto) {
+        dto.setSecret(TokenUtil.token());
+        iPandaAppSecretService.insertOrUpdate(dto);
+        return dto.getSecret();
     }
 }
