@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import javax.validation.Valid;
 import java.lang.reflect.ParameterizedType;
 import java.util.List;
+import java.util.Objects;
 
 /**
  * com.panda.core.controller.BaseController
@@ -44,7 +45,10 @@ public abstract class BaseController<E extends BaseEntity, D extends BaseDto, S 
     @RequestMapping("search")
     public PageDto<D> search(S search) {
         PageDto pageDto = iBaseService.search(search);
-        decorateList(pageDto.getRecords());
+        if (Objects.nonNull(pageDto)
+                && Objects.nonNull(pageDto.getRecords()) && !pageDto.getRecords().isEmpty()) {
+            decorateList(pageDto.getRecords());
+        }
         return pageDto;
     }
 

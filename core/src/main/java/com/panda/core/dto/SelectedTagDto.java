@@ -19,8 +19,8 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class SelectedTagDto {
 
-    private Long id;
-    private String name;
+    private Long value;
+    private String label;
     private String title;
 
 }

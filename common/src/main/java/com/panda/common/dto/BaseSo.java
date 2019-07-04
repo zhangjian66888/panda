@@ -1,8 +1,12 @@
 package com.panda.common.dto;
 
 import com.panda.common.consts.CommonConst;
+import com.panda.common.mybatis.InPair;
 import lombok.Getter;
 import lombok.Setter;
+
+import java.util.List;
+import java.util.Map;
 
 /**
  * com.panda.common.dto.BaseSearchDto
@@ -23,5 +27,8 @@ public abstract class BaseSo {
 
     protected long current;
     protected long pageSize = CommonConst.DEFAULT_PAGE_SIZE;
+
+    protected List<Long> ids;
+    protected List<InPair> ins;
 
 }

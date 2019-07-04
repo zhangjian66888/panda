@@ -13,6 +13,7 @@ import com.panda.common.dto.SelectItemDto;
 import com.panda.common.entity.BaseEntity;
 import com.panda.common.enums.DelState;
 import com.panda.common.enums.SortOrder;
+import com.panda.common.mybatis.InPair;
 import com.panda.common.util.BeanUtil;
 import com.panda.common.util.ClassUtil;
 import com.panda.common.util.ParseUtils;
@@ -163,7 +164,15 @@ public class BaseServiceImpl<M extends BaseMapper<E>, E extends BaseEntity, D ex
 
     @Override
     public List<SelectItemDto> selectItem(boolean all) {
-        return selectItem(all, null);
+        return selectItem(all, ClassUtil.newInstance(clzS));
+    }
+
+
+    @Override
+    public List<SelectItemDto> selectItem(boolean all, List<Long> ids) {
+        S s = ClassUtil.newInstance(clzS);
+        s.setIds(ids);
+        return selectItem(all, s);
     }
 
     @Override
@@ -177,6 +186,14 @@ public class BaseServiceImpl<M extends BaseMapper<E>, E extends BaseEntity, D ex
         }
         query.setDelState(DelState.NO.getId());
         QueryWrapper<E> queryWrapper = new QueryWrapper<>(query);
+        if (Objects.nonNull(s.getIds()) && !s.getIds().isEmpty()) {
+            queryWrapper.in("id", s.getIds());
+        }
+        if (Objects.nonNull(s.getIns()) && !s.getIns().isEmpty()) {
+            for (InPair inPair : s.getIns()) {
+                queryWrapper.in(inPair.getColumn(), inPair.getValues());
+            }
+        }
         String[] columns = selectItemField();
         String id = ParseUtils.camelToUnderline(columns[0]);
         String value = ParseUtils.camelToUnderline(columns[1]);
@@ -184,7 +201,6 @@ public class BaseServiceImpl<M extends BaseMapper<E>, E extends BaseEntity, D ex
 
         Method idMethod = ReflectionUtils.findMethod(clzE, "get" + StringUtils.capitalize(columns[0]));
         Method valueMethod = ReflectionUtils.findMethod(clzE, "get" + StringUtils.capitalize(columns[1]));
-
         List<SelectItemDto> list = Optional.ofNullable(list(queryWrapper)).orElse(Lists.newArrayList())
                 .stream()
                 .map(t -> {
@@ -199,6 +215,7 @@ public class BaseServiceImpl<M extends BaseMapper<E>, E extends BaseEntity, D ex
         }
         return list;
     }
+
 
     @Override
     public String[] selectItemField() {

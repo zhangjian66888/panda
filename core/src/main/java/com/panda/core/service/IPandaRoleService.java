@@ -17,7 +17,7 @@ import java.util.List;
  */
 public interface IPandaRoleService extends IBaseService<PandaRole, PandaRoleDto, PandaRoleSo> {
 
-    List<PandaRolePermissionDto> selectedByRoleId(Long roleId);
+    List<PandaRolePermissionDto> permissionsByRoleId(Long roleId);
 
     int savePermission(PandaRolePermissionDto dto);
 

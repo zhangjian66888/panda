@@ -2,4 +2,14 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.panda.core.mapper.PandaUserMapper">
 
+    <select id="vagueLike" resultType="com.panda.core.entity.PandaUser">
+        SELECT id,username,zh_name,mobile,email FROM panda_user WHERE username LIKE CONCAT(#{key},'%')
+        UNION
+        SELECT id,username,zh_name,mobile,email FROM panda_user WHERE zh_name LIKE CONCAT(#{key},'%')
+        UNION
+        SELECT id,username,zh_name,mobile,email FROM panda_user WHERE email LIKE CONCAT(#{key},'%')
+        UNION
+        SELECT id,username,zh_name,mobile,email FROM panda_user WHERE mobile LIKE CONCAT(#{key},'%') LIMIT 10
+    </select>
+
 </mapper>

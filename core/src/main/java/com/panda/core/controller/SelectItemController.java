@@ -4,9 +4,11 @@ import com.panda.common.dto.StatusDto;
 import com.panda.common.util.SelectItemUtil;
 import com.panda.core.consts.CoreConst;
 import com.panda.core.dto.search.PandaAppSo;
+import com.panda.core.dto.search.PandaGroupSo;
 import com.panda.core.service.IPandaAppService;
 import com.panda.core.service.IPandaBusinessLineService;
 import com.panda.core.service.IPandaEnvService;
+import com.panda.core.service.IPandaGroupService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -32,6 +34,9 @@ public class SelectItemController {
 
     @Autowired
     private IPandaEnvService iPandaEnvService;
+
+    @Autowired
+    private IPandaGroupService iPandaGroupService;
 
     @GetMapping("/static")
     public StatusDto staticSelectItems(
@@ -63,5 +68,17 @@ public class SelectItemController {
             @RequestParam(value = "all", required = false, defaultValue = "false") Boolean all) {
         return StatusDto.SUCCESS().setData(iPandaEnvService.selectItem(all));
     }
+
+    @GetMapping("/group")
+    public StatusDto group(
+            @RequestParam(value = "businessLineId", required = false, defaultValue = "0") Long businessLineId,
+            @RequestParam(value = "all", required = false, defaultValue = "false") Boolean all) {
+        PandaGroupSo so = new PandaGroupSo();
+        if (businessLineId > 0) {
+            so.setBusinessLineId(businessLineId);
+        }
+        return StatusDto.SUCCESS().setData(iPandaGroupService.selectItem(all, so));
+    }
+
 
 }

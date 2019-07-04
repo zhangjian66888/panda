@@ -22,6 +22,8 @@ public class PandaUserSo extends BaseSo {
 
     private Long businessLineId;
 
+    private Long groupId;
+
     private Integer userType;
 
     private String username;

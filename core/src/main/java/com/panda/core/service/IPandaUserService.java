@@ -18,9 +18,11 @@ import java.util.List;
 public interface IPandaUserService extends IBaseService<PandaUser, PandaUserDto, PandaUserSo> {
 
 
-    List<PandaUserRoleDto> selectedByUserId(Long userId);
+    List<PandaUserRoleDto> rolesByUserId(Long userId);
 
     int saveRole(PandaUserRoleDto dto);
 
     int deleteRole(PandaUserRoleDto dto);
+
+    List<PandaUserDto> vagueFullQuery(String key);
 }

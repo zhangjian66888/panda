@@ -22,7 +22,7 @@ import lombok.experimental.Accessors;
 @Accessors(chain = true)
 public class PandaGroupUser extends BaseEntity {
 
-    private String groupId;
+    private Long groupId;
 
     private Long userId;
 

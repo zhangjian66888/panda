@@ -20,7 +20,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class PandaGroupUserSo extends BaseSo {
 
-    private String groupId;
+    private Long groupId;
 
     private Long userId;
 

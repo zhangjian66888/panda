@@ -23,6 +23,10 @@ public class PandaUserDto extends BaseDto {
     private Long businessLineId;
     private String businessLineName;
 
+    private Long groupId;
+
+    private String groupName;
+
     private String username;
 
     private Integer userType;

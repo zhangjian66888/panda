@@ -24,6 +24,8 @@ public class PandaUser extends BaseEntity {
 
     private Long businessLineId;
 
+    private Long groupId;
+
     private String username;
 
     private Integer userType;

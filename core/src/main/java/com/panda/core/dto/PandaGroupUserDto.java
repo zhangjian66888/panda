@@ -20,8 +20,14 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class PandaGroupUserDto extends BaseDto {
 
-    private String groupId;
+    private Long groupId;
 
     private Long userId;
+
+    private String zhName;
+
+    private String mobile;
+
+    private String email;
 
 }
