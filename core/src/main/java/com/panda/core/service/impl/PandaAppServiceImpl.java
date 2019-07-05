@@ -63,7 +63,7 @@ public class PandaAppServiceImpl extends BaseServiceImpl<PandaAppMapper, PandaAp
         List<PandaAppSecretDto> tokens = Lists.newArrayList();
         for (PandaEnvDto env : envs) {
             PandaAppSecretDto token = new PandaAppSecretDto();
-            token.setSecret(TokenUtil.token());
+            token.setSecret(TokenUtil.secret());
             token.setAppCode(appCode);
             token.setEnvCode(env.getEnvCode());
             token.setEnvProfile(env.getEnvProfile());
@@ -104,7 +104,7 @@ public class PandaAppServiceImpl extends BaseServiceImpl<PandaAppMapper, PandaAp
 
     @Override
     public String flushSecret(PandaAppSecretDto dto) {
-        dto.setSecret(TokenUtil.token());
+        dto.setSecret(TokenUtil.secret());
         iPandaAppSecretService.insertOrUpdate(dto);
         return dto.getSecret();
     }

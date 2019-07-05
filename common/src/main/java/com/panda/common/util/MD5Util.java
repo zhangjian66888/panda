@@ -13,7 +13,7 @@ import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.Random;
 
-public class MD5Utils {
+public class MD5Util {
 
     /**
      * md5和sha-1混合加密
@@ -131,7 +131,7 @@ public class MD5Utils {
      * @param password 加密之后的密码
      * @return boolean true表示和原密码一致   false表示和原密码不一致
      */
-    public static boolean getSaltverifyMd5AndSha(String password, String md5str) {
+    public static boolean saltverifyMd5AndSha(String password, String md5str) {
         char[] cs1 = new char[32];
         char[] cs2 = new char[16];
         for (int i = 0; i < 48; i += 3) {
@@ -154,9 +154,9 @@ public class MD5Utils {
         String plaintext = "123456";
 
         // 获取加盐后的MD5值
-        String ciphertext = MD5Utils.getSaltMd5AndSha(plaintext);
+        String ciphertext = MD5Util.getSaltMd5AndSha(plaintext);
         System.out.println("加盐后MD5：" + ciphertext);
-        System.out.println("是否是同一字符串:" + MD5Utils.getSaltverifyMd5AndSha(plaintext, ciphertext));
+        System.out.println("是否是同一字符串:" + MD5Util.saltverifyMd5AndSha(plaintext, ciphertext));
     }
 
 }

@@ -8,6 +8,7 @@ import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.ObjectError;
 import org.springframework.web.HttpMediaTypeNotAcceptableException;
@@ -86,6 +87,23 @@ public class ExceptionConfig {
         return new ResponseEntity<>(StatusDto.builder()
                 .code(StatusDto.CODE_ERROR)
                 .msg("maybe db error")
+                .build(),
+                HttpStatus.OK);
+    }
+
+    /**
+     * server 异常
+     *
+     * @param e server exception
+     * @return http response
+     */
+    @ExceptionHandler(HttpMessageNotReadableException.class)
+    public HttpEntity<?> handlerHttpMessageNotReadableException(final HttpMessageNotReadableException e) {
+
+        logger.error("Exception===================", e);
+        return new ResponseEntity<>(StatusDto.builder()
+                .code(StatusDto.CODE_ERROR)
+                .msg("请求参数有误")
                 .build(),
                 HttpStatus.OK);
     }

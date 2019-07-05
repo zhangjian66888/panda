@@ -12,6 +12,10 @@ import java.util.UUID;
 public class TokenUtil {
 
 
+    public static String secret(){
+        return uuid();
+    }
+
     public static String token(){
         return uuid();
     }
@@ -21,6 +25,6 @@ public class TokenUtil {
     }
 
     public static void main(String[] args) {
-        System.out.println(token());
+        System.out.println(secret());
     }
 }

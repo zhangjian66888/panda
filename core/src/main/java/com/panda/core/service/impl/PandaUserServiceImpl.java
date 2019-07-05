@@ -5,7 +5,7 @@ import com.google.common.collect.Lists;
 import com.panda.common.enums.DelState;
 import com.panda.common.exception.PandaException;
 import com.panda.common.util.BeanUtil;
-import com.panda.common.util.MD5Utils;
+import com.panda.common.util.MD5Util;
 import com.panda.core.dto.PandaUserDto;
 import com.panda.core.dto.PandaUserRoleDto;
 import com.panda.core.dto.search.PandaUserSo;
@@ -44,7 +44,7 @@ public class PandaUserServiceImpl
 
     @Override
     public boolean save(PandaUser entity) {
-        entity.setPassword(MD5Utils.getSaltMd5AndSha(entity.getPassword()));
+        entity.setPassword(MD5Util.getSaltMd5AndSha(entity.getPassword()));
         return super.save(entity);
     }
 
