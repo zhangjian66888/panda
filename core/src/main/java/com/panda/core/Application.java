@@ -1,8 +1,10 @@
 package com.panda.core;
 
+import com.panda.core.consts.CoreConst;
 import org.mybatis.spring.annotation.MapperScan;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.core.annotation.Order;
 import org.springframework.web.cors.CorsConfiguration;
@@ -25,8 +27,7 @@ public class Application {
     }
 
     @Bean
-    @Order(0)
-    public CorsFilter corsFilter() {
+    public FilterRegistrationBean<CorsFilter> corsFilter() {
         final UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         final CorsConfiguration config = new CorsConfiguration();
         // 允许cookies跨域
@@ -47,6 +48,8 @@ public class Application {
         config.addAllowedMethod("DELETE");
         config.addAllowedMethod("PATCH");
         source.registerCorsConfiguration("/**", config);
-        return new CorsFilter(source);
+        FilterRegistrationBean filterRegistrationBean = new FilterRegistrationBean<>(new CorsFilter(source));
+        filterRegistrationBean.setOrder(CoreConst.FILTER_ORDER - 1);
+        return filterRegistrationBean;
     }
 }

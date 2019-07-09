@@ -19,6 +19,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.util.Collection;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
@@ -153,5 +154,36 @@ public class PandaGroupServiceImpl
         delete.setDelState(DelState.YES.getId());
         delete.setUpdateTime(LocalDateTime.now());
         return pandaGroupUserMapper.updateById(delete);
+    }
+
+    @Override
+    public List<PandaGroupUserDto> groupsByUserId(Long userId) {
+        PandaGroupUser query = new PandaGroupUser();
+        query.setUserId(userId);
+        query.setDelState(DelState.NO.getId());
+        QueryWrapper<PandaGroupUser> queryWrapper = new QueryWrapper<>(query);
+        queryWrapper.select("id", "group_id", "user_id");
+        queryWrapper.nonEmptyOfEntity();
+        List<PandaGroupUser> list = pandaGroupUserMapper.selectList(queryWrapper);
+        return Optional.ofNullable(list).orElse(Lists.newArrayList()).stream()
+                .map(t -> PandaGroupUserDto.builder()
+                        .groupId(t.getGroupId())
+                        .userId(t.getUserId())
+                        .build())
+                .collect(Collectors.toList());
+    }
+
+    @Override
+    public List<Long> roleIdsByGroupIds(Collection<Long> groupIds) {
+        PandaGroupRole query = new PandaGroupRole();
+        query.setDelState(DelState.NO.getId());
+        QueryWrapper<PandaGroupRole> queryWrapper = new QueryWrapper<>(query);
+        queryWrapper.in("group_id", groupIds);
+        queryWrapper.select("role_id");
+        queryWrapper.nonEmptyOfEntity();
+        List<PandaGroupRole> list = pandaGroupRoleMapper.selectList(queryWrapper);
+        return Optional.ofNullable(list).orElse(Lists.newArrayList()).stream()
+                .map(t -> t.getRoleId())
+                .collect(Collectors.toList());
     }
 }

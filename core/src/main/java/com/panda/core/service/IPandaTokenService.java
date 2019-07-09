@@ -16,4 +16,6 @@ public interface IPandaTokenService extends IBaseService<PandaToken, PandaTokenD
 
     PandaTokenDto validToken(Long userId);
 
+    PandaTokenDto validToken(String token);
+
 }

@@ -1,7 +1,9 @@
 package com.panda.core.config;
 
 import com.panda.common.dto.StatusDto;
+import com.panda.common.exception.LoginException;
 import com.panda.common.exception.PandaException;
+import com.panda.common.exception.PermissionException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.dao.DataIntegrityViolationException;
@@ -40,6 +42,37 @@ public class ExceptionConfig {
                 .msg(e.getMessage())
                 .build(),
                 HttpStatus.OK);
+    }
+
+    /**
+     * 未登录异常
+     *
+     * @param e base exception
+     * @return http response√
+     */
+    @ExceptionHandler(LoginException.class)
+    public HttpEntity<StatusDto> handlerException(final LoginException e) {
+        return new ResponseEntity<>(StatusDto.builder()
+                .code(StatusDto.CODE_ERROR)
+                .msg(e.getMessage())
+                .build(),
+                HttpStatus.UNAUTHORIZED);
+    }
+
+
+    /**
+     * 权限异常
+     *
+     * @param e base exception
+     * @return http response√
+     */
+    @ExceptionHandler(PermissionException.class)
+    public HttpEntity<StatusDto> handlerException(final PermissionException e) {
+        return new ResponseEntity<>(StatusDto.builder()
+                .code(StatusDto.CODE_ERROR)
+                .msg(e.getMessage())
+                .build(),
+                HttpStatus.FORBIDDEN);
     }
 
     /**

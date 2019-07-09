@@ -3,7 +3,7 @@ package com.panda.core.controller;
 import com.panda.common.dto.StatusDto;
 import com.panda.core.consts.CoreConst;
 import com.panda.core.dto.LoginDto;
-import com.panda.core.hander.LoginHandler;
+import com.panda.core.handler.LoginHandler;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;

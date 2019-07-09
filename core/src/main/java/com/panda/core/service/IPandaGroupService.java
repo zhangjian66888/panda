@@ -6,6 +6,7 @@ import com.panda.core.dto.PandaGroupUserDto;
 import com.panda.core.dto.search.PandaGroupSo;
 import com.panda.core.entity.PandaGroup;
 
+import java.util.Collection;
 import java.util.List;
 
 /**
@@ -31,5 +32,7 @@ public interface IPandaGroupService extends IBaseService<PandaGroup, PandaGroupD
 
     int deleteUser(PandaGroupUserDto dto);
 
+    List<PandaGroupUserDto> groupsByUserId(Long userId);
 
+    List<Long> roleIdsByGroupIds(Collection<Long> ids);
 }

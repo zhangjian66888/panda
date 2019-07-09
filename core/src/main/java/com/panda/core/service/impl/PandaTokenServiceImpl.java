@@ -41,4 +41,16 @@ public class PandaTokenServiceImpl extends BaseServiceImpl<PandaTokenMapper, Pan
                 .map(t -> BeanUtil.transBean(t, PandaTokenDto.class))
                 .orElse(null);
     }
+
+    @Override
+    public PandaTokenDto validToken(String token) {
+        PandaToken query = new PandaToken();
+        query.setAccessToken(token);
+        query.setDelState(DelState.NO.getId());
+        QueryWrapper<PandaToken> queryWrapper = new QueryWrapper<>(query);
+        queryWrapper.ge("expire_time", LocalDateTime.now());
+        return Optional.ofNullable(pandaTokenMapper.selectOne(queryWrapper))
+                .map(t -> BeanUtil.transBean(t, PandaTokenDto.class))
+                .orElse(null);
+    }
 }

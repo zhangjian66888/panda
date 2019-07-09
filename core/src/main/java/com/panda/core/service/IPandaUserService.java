@@ -20,6 +20,8 @@ public interface IPandaUserService extends IBaseService<PandaUser, PandaUserDto,
 
     List<PandaUserRoleDto> rolesByUserId(Long userId);
 
+    List<Long> rolesIdsByUserId(Long userId);
+
     int saveRole(PandaUserRoleDto dto);
 
     int deleteRole(PandaUserRoleDto dto);

@@ -1,6 +1,5 @@
-package com.panda.core.hander;
+package com.panda.core.handler;
 
-import com.panda.common.dto.StatusDto;
 import com.panda.common.exception.PandaException;
 import com.panda.common.util.MD5Util;
 import com.panda.common.util.TokenUtil;

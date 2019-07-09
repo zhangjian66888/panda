@@ -12,10 +12,12 @@ import com.panda.core.entity.PandaRolePermission;
 import com.panda.core.mapper.PandaRoleMapper;
 import com.panda.core.mapper.PandaRolePermissionMapper;
 import com.panda.core.service.IPandaRoleService;
+import org.checkerframework.checker.units.qual.A;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.util.Collection;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
@@ -37,12 +39,20 @@ public class PandaRoleServiceImpl
     @Autowired
     private PandaRolePermissionMapper pandaRolePermissionMapper;
 
+    @Autowired
+    private PandaRoleMapper pandaRoleMapper;
+
     @Override
     public List<PandaRolePermissionDto> permissionsByRoleId(Long roleId) {
+        return permissionsByRoleIds(Lists.newArrayList(roleId));
+    }
+
+    @Override
+    public List<PandaRolePermissionDto> permissionsByRoleIds(List<Long> roleIds) {
         PandaRolePermission query = new PandaRolePermission();
-        query.setRoleId(roleId);
         query.setDelState(DelState.NO.getId());
         QueryWrapper<PandaRolePermission> queryWrapper = new QueryWrapper<>(query);
+        queryWrapper.in("role_id", roleIds);
         queryWrapper.select("id", "role_id", "permission_id");
         queryWrapper.nonEmptyOfEntity();
         List<PandaRolePermission> list = pandaRolePermissionMapper.selectList(queryWrapper);
@@ -53,6 +63,40 @@ public class PandaRoleServiceImpl
                         .roleId(t.getRoleId())
                         .build())
                 .collect(Collectors.toList());
+
+    }
+
+    @Override
+    public List<Long> permissionIdsByRoleIds(Collection<Long> roleIds) {
+        PandaRolePermission query = new PandaRolePermission();
+        query.setDelState(DelState.NO.getId());
+        QueryWrapper<PandaRolePermission> queryWrapper = new QueryWrapper<>(query);
+        queryWrapper.in("role_id", roleIds);
+        queryWrapper.select("id", "role_id", "permission_id");
+        queryWrapper.nonEmptyOfEntity();
+        List<PandaRolePermission> list = pandaRolePermissionMapper.selectList(queryWrapper);
+        return Optional.ofNullable(list).orElse(Lists.newArrayList()).stream()
+                .map(t -> t.getPermissionId())
+                .distinct()
+                .collect(Collectors.toList());
+
+    }
+
+    @Override
+    public List<Long> permissionIdsByRoleIds(Collection<Long> roleIds, List<Long> envCodes, Long appCode) {
+        PandaRole query = new PandaRole();
+        query.setDelState(DelState.NO.getId());
+        query.setAppCode(appCode);
+        QueryWrapper<PandaRole> queryWrapper = new QueryWrapper<>(query);
+        queryWrapper.in("env_code", envCodes);
+        queryWrapper.in("id", roleIds);
+        queryWrapper.select("id");
+        queryWrapper.nonEmptyOfEntity();
+        List<PandaRole> list = pandaRoleMapper.selectList(queryWrapper);
+        if (Objects.isNull(list) || list.isEmpty()) {
+            return Lists.newArrayList();
+        }
+        return permissionIdsByRoleIds(list.stream().map(t -> t.getId()).collect(Collectors.toList()));
     }
 
     @Override

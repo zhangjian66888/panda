@@ -66,6 +66,20 @@ public class PandaUserServiceImpl
     }
 
     @Override
+    public List<Long> rolesIdsByUserId(Long userId) {
+        PandaUserRole query = new PandaUserRole();
+        query.setUserId(userId);
+        query.setDelState(DelState.NO.getId());
+        QueryWrapper<PandaUserRole> rpQueryWrapper = new QueryWrapper<>(query);
+        rpQueryWrapper.select("role_id");
+        rpQueryWrapper.nonEmptyOfEntity();
+        List<PandaUserRole> list = pandaUserRoleMapper.selectList(rpQueryWrapper);
+        return Optional.ofNullable(list).orElse(Lists.newArrayList()).stream()
+                .map(t -> t.getRoleId())
+                .collect(Collectors.toList());
+    }
+
+    @Override
     public int saveRole(PandaUserRoleDto dto) {
         PandaUserRole query = new PandaUserRole();
         query.setRoleId(dto.getRoleId());

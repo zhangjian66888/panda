@@ -5,14 +5,10 @@ import com.panda.common.dto.BaseSo;
 import com.panda.common.dto.PageDto;
 import com.panda.common.dto.StatusDto;
 import com.panda.common.entity.BaseEntity;
+import com.panda.common.util.ClassUtil;
 import com.panda.core.service.IBaseService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.lang.reflect.ParameterizedType;
@@ -56,6 +52,13 @@ public abstract class BaseController<E extends BaseEntity, D extends BaseDto, S 
     @GetMapping("/detail")
     public StatusDto detail(@RequestParam(value = "id") Long id) {
         return StatusDto.SUCCESS().setData(decorateDto(iBaseService.findById(id)));
+    }
+
+    @GetMapping("/copy")
+    public StatusDto copy(@RequestParam(value = "id") Long id) {
+        D dto = id > 0 ? iBaseService.findById(id) : ClassUtil.newInstance(clzD);
+        dto.setId(null);
+        return StatusDto.SUCCESS().setData(decorateDto(dto));
     }
 
     @PostMapping("/save")

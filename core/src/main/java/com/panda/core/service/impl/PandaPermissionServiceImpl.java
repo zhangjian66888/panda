@@ -24,6 +24,7 @@ public class PandaPermissionServiceImpl
 
     @Override
     public String[] findListByIdsField() {
-        return new String[]{"id", "name", "show_name"};
+        return new String[]{"id", "name", "show_name", "url", "method", "type", "action",
+                "menu_type", "parent_id", "menu_icon","menu_sequence"};
     }
 }
