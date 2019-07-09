@@ -4,11 +4,11 @@ import com.panda.common.dto.StatusDto;
 import com.panda.core.consts.CoreConst;
 import com.panda.core.dto.LoginDto;
 import com.panda.core.handler.LoginHandler;
+import com.panda.core.security.SecurityRoleHandler;
+import com.panda.core.security.SecurityUser;
+import com.panda.core.security.SecurityUserContext;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 
@@ -21,15 +21,24 @@ import javax.validation.Valid;
  */
 @RestController
 @RequestMapping(CoreConst.MAIN_REQUEST_PREFIX + "")
-public class LoginController {
+public class SpeedController {
 
     @Autowired
     private LoginHandler loginHandler;
+
+    @Autowired
+    private SecurityRoleHandler securityRoleHandler;
 
     @PostMapping("login")
     public StatusDto login(@Valid @RequestBody LoginDto loginDto) {
 
         return StatusDto.SUCCESS().setData(loginHandler.login(loginDto));
+    }
+
+    @GetMapping("permissions")
+    public StatusDto permissions() {
+        SecurityUser user = SecurityUserContext.getContext();
+        return StatusDto.SUCCESS().setData(securityRoleHandler.permissionsByRoleIds(user.getRoleIds()));
     }
 
 }

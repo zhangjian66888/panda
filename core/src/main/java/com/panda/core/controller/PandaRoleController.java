@@ -76,8 +76,8 @@ public class PandaRoleController extends BaseController<PandaRole, PandaRoleDto,
                 .stream().collect(Collectors.toMap(t -> t.getId(), t -> t));
         List<SelectedTagDto> tags = list.stream().map(t -> {
             SelectedTagDto tagDto = new SelectedTagDto();
-            tagDto.setValue(t.getRoleId());
-            Optional.ofNullable(map.get(t.getRoleId())).ifPresent(st -> {
+            tagDto.setValue(t.getPermissionId());
+            Optional.ofNullable(map.get(t.getPermissionId())).ifPresent(st -> {
                 tagDto.setLabel(st.getShowName());
                 tagDto.setTitle(st.getName());
             });

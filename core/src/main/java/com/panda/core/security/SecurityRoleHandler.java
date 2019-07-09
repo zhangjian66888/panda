@@ -1,8 +1,11 @@
 package com.panda.core.security;
 
 import com.google.common.collect.Lists;
+import com.google.common.collect.Maps;
+import com.panda.common.enums.MenuType;
 import com.panda.core.config.VariableConfig;
 import com.panda.core.dto.PandaPermissionDto;
+import com.panda.core.dto.PermissionDto;
 import com.panda.core.service.IPandaEnvService;
 import com.panda.core.service.IPandaPermissionService;
 import com.panda.core.service.IPandaRoleService;
@@ -10,10 +13,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import java.util.Collection;
-import java.util.List;
-import java.util.Objects;
-import java.util.Optional;
+import java.util.*;
 import java.util.stream.Collectors;
 
 /**
@@ -66,5 +66,40 @@ public class SecurityRoleHandler {
 
     }
 
+    public PermissionDto permissionsByRoleIds(Collection<Long> roleIds) {
+        List<Long> envCodes = iPandaEnvService.profileToCode(variableConfig.getProfile().split(","));
+        List<Long> permissionIds = iPandaRoleService.permissionIdsByRoleIds(roleIds, envCodes, variableConfig.getAppCode());
+        if (Objects.isNull(permissionIds) || permissionIds.isEmpty()) {
+            return new PermissionDto();
+        }
+        List<PandaPermissionDto> permissionDtos = iPandaPermissionService.findListByIds(permissionIds);
+
+        Map<Long, PermissionDto.MenuItemDto> menuMap = Maps.newHashMap();
+        List<PermissionDto.MenuItemDto> subMenus = Lists.newArrayList();
+        List<String> persmissons = Lists.newArrayList();
+        for (PandaPermissionDto dto : permissionDtos) {
+            PermissionDto.MenuItemDto menuItem = PermissionDto.MenuItemDto.builder()
+                    .icon(dto.getMenuIcon())
+                    .title(dto.getShowName())
+                    .url(dto.getUrl())
+                    .order(dto.getMenuSequence())
+                    .build();
+            if (MenuType.FIRST_MENU.getId() == dto.getMenuType()) {
+                menuItem.setSubItem(new TreeSet<>(Comparator.comparing(PermissionDto.MenuItemDto::getOrder)));
+                menuMap.put(dto.getId(), menuItem);
+            } else if (MenuType.SECOND_MENU.getId() == dto.getMenuType()) {
+                menuItem.setParentId(dto.getParentId());
+                subMenus.add(menuItem);
+            }
+            persmissons.add(dto.getName());
+        }
+        subMenus.forEach(t -> Optional.ofNullable(menuMap.get(t.getParentId())).ifPresent(m -> m.getSubItem().add(t)));
+        List<PermissionDto.MenuItemDto> menus = menuMap.values().stream()
+                .sorted(Comparator.comparing(PermissionDto.MenuItemDto::getOrder))
+                .collect(Collectors.toList());
+        return PermissionDto.builder().permissions(persmissons)
+                .menuItems(menus)
+                .build();
+    }
 
 }

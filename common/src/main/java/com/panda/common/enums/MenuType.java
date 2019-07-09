@@ -16,9 +16,9 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public enum  MenuType {
 
-    DEFAULT(0, "默认权限"),
-    FIRST_MENU(1, "一级菜单"),
-    SECOND_MENU(2, "二级菜单");
+    DEFAULT(0, "非菜单"),
+    FIRST_MENU(1, "一级"),
+    SECOND_MENU(2, "二级");
 
     private int id;
     private String value;

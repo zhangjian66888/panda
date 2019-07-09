@@ -37,6 +37,12 @@ public class LoginHandler {
         String errorMsg = "账号或密码错误";
         PandaUserDto pandaUserDto = iPandaUserService.findOne(PandaUserDto.builder().username(dto.getUsername()).build());
         if (Objects.isNull(pandaUserDto)) {
+            pandaUserDto = iPandaUserService.findOne(PandaUserDto.builder().mobile(dto.getUsername()).build());
+        }
+        if (Objects.isNull(pandaUserDto)) {
+            pandaUserDto = iPandaUserService.findOne(PandaUserDto.builder().email(dto.getUsername()).build());
+        }
+        if (Objects.isNull(pandaUserDto)) {
             throw new PandaException(errorMsg);
         }
         if (!MD5Util.saltverifyMd5AndSha(dto.getPassword(), pandaUserDto.getPassword())) {
