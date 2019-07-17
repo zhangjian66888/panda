@@ -45,13 +45,18 @@ public class ACLProperties {
     }
 
     public boolean checkACL(String url) {
-        return checkOpenUrls(url) || checkOpenPaths(url) || !(checkBlackUrls(url) || checkBlackPaths(url));
+        if (checkOpenUrls(url)) return true;
+        if (checkOpenPaths(url)) return true;
+        if (checkBlackUrls(url)) return false;
+        if (checkBlackPaths(url)) return false;
+        return false;
     }
 
     public static void main(String[] args) {
         ACLProperties aclProperties = new ACLProperties();
-//        aclProperties.setOpenUrls(Lists.newArrayList("/actuator/health", "/actuator/mappings"));
-        aclProperties.setBlankUrls(Lists.newArrayList("/actuator/health", "/actuator/mappings"));
+        aclProperties.setOpenUrls(Lists.newArrayList("/actuator/health", "/actuator/mappings"));
+//        aclProperties.setBlankUrls(Lists.newArrayList("/actuator/health", "/actuator/mappings"));
         System.out.println(aclProperties.checkACL("/actuator/health"));
+        System.out.println(aclProperties.checkACL("/permissions"));
     }
 }

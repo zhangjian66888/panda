@@ -10,10 +10,10 @@ import com.panda.core.entity.PandaEnv;
 import com.panda.core.mapper.PandaEnvMapper;
 import com.panda.core.service.IPandaCodeService;
 import com.panda.core.service.IPandaEnvService;
-import jdk.nashorn.internal.runtime.logging.DebugLogger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
@@ -56,6 +56,11 @@ public class PandaEnvServiceImpl extends BaseServiceImpl<PandaEnvMapper, PandaEn
 
     @Override
     public List<Long> profileToCode(String... profiles) {
+        return profileToCode(Arrays.asList(profiles));
+    }
+
+    @Override
+    public List<Long> profileToCode(List<String> profiles) {
         PandaEnv query = new PandaEnv();
         query.setDelState(DelState.NO.getId());
         QueryWrapper<PandaEnv> queryWrapper = new QueryWrapper<>(query);

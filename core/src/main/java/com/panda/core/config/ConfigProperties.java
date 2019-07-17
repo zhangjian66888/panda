@@ -6,6 +6,8 @@ import lombok.NoArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
+import java.util.List;
+
 /**
  * com.panda.core.config.VariableConfig
  * <p>
@@ -17,13 +19,13 @@ import org.springframework.stereotype.Component;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class VariableConfig {
+public class ConfigProperties {
 
     @Value("${app.code}")
     private Long appCode;
 
     @Value("${spring.profiles.active}")
-    private String profile;
+    private List<String> profiles;
 
 
 

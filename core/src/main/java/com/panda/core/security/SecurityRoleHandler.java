@@ -3,7 +3,7 @@ package com.panda.core.security;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import com.panda.common.enums.MenuType;
-import com.panda.core.config.VariableConfig;
+import com.panda.core.config.ConfigProperties;
 import com.panda.core.dto.PandaPermissionDto;
 import com.panda.core.dto.PermissionDto;
 import com.panda.core.service.IPandaEnvService;
@@ -28,7 +28,7 @@ import java.util.stream.Collectors;
 public class SecurityRoleHandler {
 
     @Autowired
-    private VariableConfig variableConfig;
+    private ConfigProperties configProperties;
 
     @Autowired
     private IPandaRoleService iPandaRoleService;
@@ -41,8 +41,8 @@ public class SecurityRoleHandler {
 
     public List<PandaGrantedAuthority> authoritiesByRoleIds(Collection<Long> roleIds) {
 
-        List<Long> envCodes = iPandaEnvService.profileToCode(variableConfig.getProfile().split(","));
-        List<Long> permissionIds = iPandaRoleService.permissionIdsByRoleIds(roleIds, envCodes, variableConfig.getAppCode());
+        List<Long> envCodes = iPandaEnvService.profileToCode(configProperties.getProfiles());
+        List<Long> permissionIds = iPandaRoleService.permissionIdsByRoleIds(roleIds, envCodes, configProperties.getAppCode());
         if (Objects.isNull(permissionIds) || permissionIds.isEmpty()) {
             return Lists.newArrayList();
         }
@@ -67,8 +67,8 @@ public class SecurityRoleHandler {
     }
 
     public PermissionDto permissionsByRoleIds(Collection<Long> roleIds) {
-        List<Long> envCodes = iPandaEnvService.profileToCode(variableConfig.getProfile().split(","));
-        List<Long> permissionIds = iPandaRoleService.permissionIdsByRoleIds(roleIds, envCodes, variableConfig.getAppCode());
+        List<Long> envCodes = iPandaEnvService.profileToCode(configProperties.getProfiles());
+        List<Long> permissionIds = iPandaRoleService.permissionIdsByRoleIds(roleIds, envCodes, configProperties.getAppCode());
         if (Objects.isNull(permissionIds) || permissionIds.isEmpty()) {
             return new PermissionDto();
         }

@@ -3,7 +3,6 @@ package com.panda.core.service;
 import com.panda.core.dto.PandaEnvDto;
 import com.panda.core.dto.search.PandaEnvSo;
 import com.panda.core.entity.PandaEnv;
-import com.baomidou.mybatisplus.extension.service.IService;
 
 import java.util.List;
 
@@ -18,5 +17,7 @@ import java.util.List;
 public interface IPandaEnvService extends IBaseService<PandaEnv, PandaEnvDto, PandaEnvSo>,
         ISelectItem<PandaEnvSo> {
 
-    List<Long> profileToCode(String ...profile);
+    List<Long> profileToCode(String... profile);
+
+    List<Long> profileToCode(List<String> profiles);
 }
