@@ -13,11 +13,5 @@ management:
 
 mybatis-plus:
   mapper-locations: mapper/core/*.xml
-spring:
-  datasource:
-    driver-class-name: com.mysql.jdbc.Driver
-    url: jdbc:mysql://10.102.148.154:3306/panda?useAffectedRows=true&zeroDateTimeBehavior=convertToNull&allowMultiQueries=true&useSSL=true
-    username: sayabc
-    password: sayabc
 
 

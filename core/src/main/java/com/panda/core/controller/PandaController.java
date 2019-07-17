@@ -21,7 +21,7 @@ import javax.validation.Valid;
  */
 @RestController
 @RequestMapping(CoreConst.MAIN_REQUEST_PREFIX + "")
-public class SpeedController {
+public class PandaController {
 
     @Autowired
     private LoginHandler loginHandler;

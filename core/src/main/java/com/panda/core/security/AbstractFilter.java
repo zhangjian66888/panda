@@ -2,10 +2,10 @@ package com.panda.core.security;
 
 import com.alibaba.fastjson.JSON;
 import com.panda.common.dto.StatusDto;
-import com.panda.common.exception.LoginException;
 import com.panda.common.exception.PandaFilterException;
+import com.panda.core.config.ACLProperties;
 import com.panda.core.consts.CoreConst;
-import org.springframework.util.StringUtils;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import javax.servlet.*;
 import javax.servlet.http.HttpServletRequest;
@@ -22,9 +22,13 @@ import java.io.PrintWriter;
  */
 public abstract class AbstractFilter implements Filter {
 
+    @Autowired
+    private ACLProperties aclProperties;
+
     protected boolean ignoring(HttpServletRequest request) {
         if (request.getRequestURI().startsWith(CoreConst.OPEN_REQUEST_PREFIX)
-                || request.getRequestURI().equalsIgnoreCase(CoreConst.MAIN_REQUEST_PREFIX.concat("login"))) {
+                || request.getRequestURI().equalsIgnoreCase(CoreConst.MAIN_REQUEST_PREFIX.concat("login"))
+                || aclProperties.checkACL(request.getRequestURI())) {
             return true;
         }
         return false;
