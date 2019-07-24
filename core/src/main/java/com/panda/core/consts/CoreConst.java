@@ -11,9 +11,6 @@ public interface CoreConst {
 
     String MAIN_REQUEST_PREFIX = "/panda/core/";
 
-    String OPEN_REQUEST_PREFIX = "/panda/open/";
-
-
     long TOKEN_VALID_DAY = 30L;
 
     int FILTER_ORDER = -200;

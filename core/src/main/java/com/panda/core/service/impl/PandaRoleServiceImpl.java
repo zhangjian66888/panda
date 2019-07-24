@@ -2,6 +2,7 @@ package com.panda.core.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.google.common.collect.Lists;
+import com.google.common.collect.Sets;
 import com.panda.common.enums.DelState;
 import com.panda.common.exception.PandaException;
 import com.panda.core.dto.PandaRoleDto;
@@ -17,10 +18,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
-import java.util.Collection;
-import java.util.List;
-import java.util.Objects;
-import java.util.Optional;
+import java.util.*;
 import java.util.stream.Collectors;
 
 /**
@@ -43,12 +41,12 @@ public class PandaRoleServiceImpl
     private PandaRoleMapper pandaRoleMapper;
 
     @Override
-    public List<PandaRolePermissionDto> permissionsByRoleId(Long roleId) {
+    public Set<PandaRolePermissionDto> permissionsByRoleId(Long roleId) {
         return permissionsByRoleIds(Lists.newArrayList(roleId));
     }
 
     @Override
-    public List<PandaRolePermissionDto> permissionsByRoleIds(List<Long> roleIds) {
+    public Set<PandaRolePermissionDto> permissionsByRoleIds(List<Long> roleIds) {
         PandaRolePermission query = new PandaRolePermission();
         query.setDelState(DelState.NO.getId());
         QueryWrapper<PandaRolePermission> queryWrapper = new QueryWrapper<>(query);
@@ -62,12 +60,30 @@ public class PandaRoleServiceImpl
                         .permissionId(t.getPermissionId())
                         .roleId(t.getRoleId())
                         .build())
-                .collect(Collectors.toList());
+                .collect(Collectors.toSet());
 
     }
 
     @Override
-    public List<Long> permissionIdsByRoleIds(Collection<Long> roleIds) {
+    public Set<Long> filterRoles(Set<Long> roleIds, List<Long> envCodes, Long appCode) {
+        if (Objects.isNull(roleIds) || roleIds.isEmpty()){
+            return roleIds;
+        }
+        PandaRole query = new PandaRole();
+        query.setDelState(DelState.NO.getId());
+        query.setAppCode(appCode);
+        QueryWrapper<PandaRole> queryWrapper = new QueryWrapper<>(query);
+        queryWrapper.in("env_code", envCodes);
+        queryWrapper.in("id", roleIds);
+        queryWrapper.select("id");
+        queryWrapper.nonEmptyOfEntity();
+        List<PandaRole> list = pandaRoleMapper.selectList(queryWrapper);
+        return Optional.ofNullable(list).orElse(Lists.newArrayList()).stream()
+                .map(t -> t.getId()).collect(Collectors.toSet());
+    }
+
+    @Override
+    public Set<Long> permissionIdsByRoleIds(Set<Long> roleIds) {
         PandaRolePermission query = new PandaRolePermission();
         query.setDelState(DelState.NO.getId());
         QueryWrapper<PandaRolePermission> queryWrapper = new QueryWrapper<>(query);
@@ -78,25 +94,14 @@ public class PandaRoleServiceImpl
         return Optional.ofNullable(list).orElse(Lists.newArrayList()).stream()
                 .map(t -> t.getPermissionId())
                 .distinct()
-                .collect(Collectors.toList());
+                .collect(Collectors.toSet());
 
     }
 
     @Override
-    public List<Long> permissionIdsByRoleIds(Collection<Long> roleIds, List<Long> envCodes, Long appCode) {
-        PandaRole query = new PandaRole();
-        query.setDelState(DelState.NO.getId());
-        query.setAppCode(appCode);
-        QueryWrapper<PandaRole> queryWrapper = new QueryWrapper<>(query);
-        queryWrapper.in("env_code", envCodes);
-        queryWrapper.in("id", roleIds);
-        queryWrapper.select("id");
-        queryWrapper.nonEmptyOfEntity();
-        List<PandaRole> list = pandaRoleMapper.selectList(queryWrapper);
-        if (Objects.isNull(list) || list.isEmpty()) {
-            return Lists.newArrayList();
-        }
-        return permissionIdsByRoleIds(list.stream().map(t -> t.getId()).collect(Collectors.toList()));
+    public Set<Long> permissionIdsByRoleIds(Set<Long> roleIds, List<Long> envCodes, Long appCode) {
+        return Optional.ofNullable(filterRoles(roleIds, envCodes, appCode))
+                .filter(t -> !t.isEmpty()).map(t -> permissionIdsByRoleIds(t)).orElse(Sets.newHashSet());
     }
 
     @Override

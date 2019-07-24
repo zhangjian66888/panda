@@ -23,10 +23,4 @@ public class ConfigProperties {
 
     @Value("${app.code}")
     private Long appCode;
-
-    @Value("${spring.profiles.active}")
-    private List<String> profiles;
-
-
-
 }

@@ -1,14 +1,17 @@
 package com.panda.core.service.impl;
 
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.google.common.collect.Lists;
 import com.panda.common.enums.CodeType;
 import com.panda.common.enums.DelState;
+import com.panda.common.util.BeanUtil;
 import com.panda.common.util.TokenUtil;
 import com.panda.core.dto.PandaAppDto;
 import com.panda.core.dto.PandaAppSecretDto;
 import com.panda.core.dto.PandaEnvDto;
 import com.panda.core.dto.search.PandaAppSo;
 import com.panda.core.entity.PandaApp;
+import com.panda.core.entity.PandaAppSecret;
 import com.panda.core.mapper.PandaAppMapper;
 import com.panda.core.service.IPandaAppSecretService;
 import com.panda.core.service.IPandaAppService;
@@ -94,6 +97,22 @@ public class PandaAppServiceImpl extends BaseServiceImpl<PandaAppMapper, PandaAp
         }
 
         return new ArrayList<>(map.values());
+    }
+
+    @Override
+    public PandaAppSecretDto secret(Long code, String secret, String ...profiles) {
+
+        PandaAppSecret tokenQuery = new PandaAppSecret() {{
+            setDelState(DelState.NO.getId());
+            setAppCode(code);
+            setSecret(secret);
+        }};
+        QueryWrapper<PandaAppSecret> queryWrapper = new QueryWrapper<>(tokenQuery);
+        queryWrapper.in("env_profile", profiles);
+        PandaAppSecret entity = iPandaAppSecretService.getOne(queryWrapper);
+        return Optional.ofNullable(entity)
+                .map(t -> BeanUtil.transBean(t, PandaAppSecretDto.class))
+                .orElse(null);
     }
 
     @Override

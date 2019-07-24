@@ -7,6 +7,7 @@ import com.panda.core.entity.PandaRole;
 
 import java.util.Collection;
 import java.util.List;
+import java.util.Set;
 
 /**
  * <p>
@@ -18,13 +19,15 @@ import java.util.List;
  */
 public interface IPandaRoleService extends IBaseService<PandaRole, PandaRoleDto, PandaRoleSo> {
 
-    List<PandaRolePermissionDto> permissionsByRoleId(Long roleId);
+    Set<PandaRolePermissionDto> permissionsByRoleId(Long roleId);
 
-    List<PandaRolePermissionDto> permissionsByRoleIds(List<Long> roleIds);
+    Set<PandaRolePermissionDto> permissionsByRoleIds(List<Long> roleIds);
 
-    List<Long> permissionIdsByRoleIds(Collection<Long> roleIds);
+    Set<Long> filterRoles(Set<Long> roleIds, List<Long> envCodes, Long appCode);
 
-    List<Long> permissionIdsByRoleIds(Collection<Long> roleIds, List<Long> envCodes, Long appCode);
+    Set<Long> permissionIdsByRoleIds(Set<Long> roleIds);
+
+    Set<Long> permissionIdsByRoleIds(Set<Long> roleIds, List<Long> envCodes, Long appCode);
 
     int savePermission(PandaRolePermissionDto dto);
 

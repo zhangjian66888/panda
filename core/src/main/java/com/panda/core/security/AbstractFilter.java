@@ -1,6 +1,7 @@
 package com.panda.core.security;
 
 import com.alibaba.fastjson.JSON;
+import com.panda.api.consts.ApiConst;
 import com.panda.common.dto.StatusDto;
 import com.panda.common.exception.PandaFilterException;
 import com.panda.core.config.ACLProperties;
@@ -26,7 +27,7 @@ public abstract class AbstractFilter implements Filter {
     private ACLProperties aclProperties;
 
     protected boolean ignoring(HttpServletRequest request) {
-        if (request.getRequestURI().startsWith(CoreConst.OPEN_REQUEST_PREFIX)
+        if (request.getRequestURI().startsWith(ApiConst.API_REQUEST_PREFIX)
                 || request.getRequestURI().equalsIgnoreCase(CoreConst.MAIN_REQUEST_PREFIX.concat("login"))
                 || aclProperties.checkACL(request.getRequestURI())) {
             return true;

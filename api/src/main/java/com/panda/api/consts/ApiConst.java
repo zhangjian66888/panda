@@ -1,0 +1,12 @@
+package com.panda.api.consts;
+
+/**
+ * com.panda.api.consts.ApiConst
+ * <p>
+ * DATE 2019/7/24
+ *
+ * @author zhanglijian.
+ */
+public interface ApiConst {
+    String API_REQUEST_PREFIX = "/panda/api/";
+}

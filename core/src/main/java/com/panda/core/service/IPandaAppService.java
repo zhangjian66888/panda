@@ -20,6 +20,8 @@ public interface IPandaAppService extends IBaseService<PandaApp, PandaAppDto, Pa
 
     List<PandaAppSecretDto> secretByAppCode(Long code);
 
+    PandaAppSecretDto secret(Long code, String secret, String ...profiles);
+
     String flushSecret(PandaAppSecretDto dto);
 
 }

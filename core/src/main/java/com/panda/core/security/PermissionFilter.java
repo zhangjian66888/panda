@@ -2,6 +2,7 @@ package com.panda.core.security;
 
 import com.panda.common.exception.PermissionException;
 import com.panda.core.consts.CoreConst;
+import com.panda.core.handler.RoleHandler;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.annotation.Order;
@@ -25,7 +26,7 @@ import java.util.List;
 public class PermissionFilter extends AbstractFilter {
 
     @Autowired
-    private SecurityRoleHandler securityRoleHandler;
+    private RoleHandler roleHandler;
 
     public PermissionFilter() {
         log.info("==================================PermissionFilter===============");
@@ -34,7 +35,7 @@ public class PermissionFilter extends AbstractFilter {
     @Override
     public void doingFilter(HttpServletRequest request, HttpServletResponse response) {
         SecurityUser user = SecurityUserContext.getContext();
-        List<PandaGrantedAuthority> authorities = securityRoleHandler.authoritiesByRoleIds(user.getRoleIds());
+        List<PandaGrantedAuthority> authorities = roleHandler.authoritiesByRoleIds(user.getRoleIds());
         String url;
         String method;
         AntPathRequestMatcher matcher;

@@ -1,7 +1,5 @@
 package com.panda.core.security;
 
-import org.springframework.util.Assert;
-
 /**
  * com.panda.core.security.ThreadLocalContext
  * <p>

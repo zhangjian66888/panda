@@ -7,6 +7,7 @@ import com.panda.common.dto.PageDto;
 import com.panda.common.entity.BaseEntity;
 
 import java.util.List;
+import java.util.Set;
 
 /**
  * com.panda.core.service.IBaseService
@@ -34,6 +35,8 @@ public interface IBaseService<E extends BaseEntity, D extends BaseDto, S extends
     D findOne(D dto);
 
     List<D> findListByIds(List<Long> ids);
+
+    List<D> findListByIds(Set<Long> ids);
 
     String[] findListByIdsField();
 }

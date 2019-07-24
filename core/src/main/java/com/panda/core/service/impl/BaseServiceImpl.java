@@ -25,9 +25,7 @@ import org.springframework.util.StringUtils;
 import java.lang.reflect.Method;
 import java.lang.reflect.ParameterizedType;
 import java.time.LocalDateTime;
-import java.util.List;
-import java.util.Objects;
-import java.util.Optional;
+import java.util.*;
 import java.util.stream.Collectors;
 
 /**
@@ -155,6 +153,11 @@ public class BaseServiceImpl<M extends BaseMapper<E>, E extends BaseEntity, D ex
         return Optional.ofNullable(list).orElse(Lists.newArrayList())
                 .stream().map(t -> BeanUtil.transBean(t, clzD)).collect(Collectors.toList());
 
+    }
+
+    @Override
+    public List<D> findListByIds(Set<Long> ids) {
+        return findListByIds(new ArrayList<>(ids));
     }
 
     @Override

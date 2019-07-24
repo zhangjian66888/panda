@@ -1,12 +1,11 @@
-package com.panda.core.security;
+package com.panda.core.handler;
 
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import com.panda.common.enums.MenuType;
-import com.panda.core.config.ConfigProperties;
 import com.panda.core.dto.PandaPermissionDto;
 import com.panda.core.dto.PermissionDto;
-import com.panda.core.service.IPandaEnvService;
+import com.panda.core.security.PandaGrantedAuthority;
 import com.panda.core.service.IPandaPermissionService;
 import com.panda.core.service.IPandaRoleService;
 import lombok.extern.slf4j.Slf4j;
@@ -25,10 +24,8 @@ import java.util.stream.Collectors;
  */
 @Slf4j
 @Component
-public class SecurityRoleHandler {
+public class RoleHandler {
 
-    @Autowired
-    private ConfigProperties configProperties;
 
     @Autowired
     private IPandaRoleService iPandaRoleService;
@@ -36,13 +33,9 @@ public class SecurityRoleHandler {
     @Autowired
     private IPandaPermissionService iPandaPermissionService;
 
-    @Autowired
-    private IPandaEnvService iPandaEnvService;
+    public List<PandaGrantedAuthority> authoritiesByRoleIds(Set<Long> roleIds) {
 
-    public List<PandaGrantedAuthority> authoritiesByRoleIds(Collection<Long> roleIds) {
-
-        List<Long> envCodes = iPandaEnvService.profileToCode(configProperties.getProfiles());
-        List<Long> permissionIds = iPandaRoleService.permissionIdsByRoleIds(roleIds, envCodes, configProperties.getAppCode());
+        Set<Long> permissionIds = iPandaRoleService.permissionIdsByRoleIds(roleIds);
         if (Objects.isNull(permissionIds) || permissionIds.isEmpty()) {
             return Lists.newArrayList();
         }
@@ -66,9 +59,8 @@ public class SecurityRoleHandler {
 
     }
 
-    public PermissionDto permissionsByRoleIds(Collection<Long> roleIds) {
-        List<Long> envCodes = iPandaEnvService.profileToCode(configProperties.getProfiles());
-        List<Long> permissionIds = iPandaRoleService.permissionIdsByRoleIds(roleIds, envCodes, configProperties.getAppCode());
+    public PermissionDto permissionsByRoleIds(Set<Long> roleIds) {
+        Set<Long> permissionIds = iPandaRoleService.permissionIdsByRoleIds(roleIds);
         if (Objects.isNull(permissionIds) || permissionIds.isEmpty()) {
             return new PermissionDto();
         }

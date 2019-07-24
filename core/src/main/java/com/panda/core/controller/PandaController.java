@@ -4,7 +4,7 @@ import com.panda.common.dto.StatusDto;
 import com.panda.core.consts.CoreConst;
 import com.panda.core.dto.LoginDto;
 import com.panda.core.handler.LoginHandler;
-import com.panda.core.security.SecurityRoleHandler;
+import com.panda.core.handler.RoleHandler;
 import com.panda.core.security.SecurityUser;
 import com.panda.core.security.SecurityUserContext;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,7 +27,7 @@ public class PandaController {
     private LoginHandler loginHandler;
 
     @Autowired
-    private SecurityRoleHandler securityRoleHandler;
+    private RoleHandler securityRoleHandler;
 
     @PostMapping("login")
     public StatusDto login(@Valid @RequestBody LoginDto loginDto) {
