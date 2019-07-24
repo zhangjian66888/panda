@@ -35,11 +35,11 @@ public class PermissionFilter extends AbstractFilter {
     @Override
     public void doingFilter(HttpServletRequest request, HttpServletResponse response) {
         SecurityUser user = SecurityUserContext.getContext();
-        List<PandaGrantedAuthority> authorities = roleHandler.authoritiesByRoleIds(user.getRoleIds());
+        List<GrantedAuthority> authorities = roleHandler.authoritiesByRoleIds(user.getRoleIds());
         String url;
         String method;
         AntPathRequestMatcher matcher;
-        for (PandaGrantedAuthority ga : authorities) {
+        for (GrantedAuthority ga : authorities) {
             url = ga.getUrl();
             method = ga.getMethod();
             if (!StringUtils.hasLength(url) || !StringUtils.hasLength(method)) {

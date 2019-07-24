@@ -1,22 +1,23 @@
-package com.panda.api.dto;
+package com.panda.core.security;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 /**
- * com.panda.api.dto.PermissionDto
+ * com.panda.core.security.PandaGrantedAuthority
  * <p>
- * DATE 2019/7/24
+ * DATE 2019/7/8
  *
  * @author zhanglijian.
  */
+
 @Data
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class AuthAuthority {
+@ToString
+public class GrantedAuthority {
+
+    private Long id;
 
     private String name;
 

@@ -13,5 +13,4 @@ import com.panda.core.entity.PandaPermission;
  * @since 2019-06-26
  */
 public interface IPandaPermissionService extends IBaseService<PandaPermission, PandaPermissionDto, PandaPermissionSo> {
-
 }

@@ -42,11 +42,11 @@ public class PandaRoleServiceImpl
 
     @Override
     public Set<PandaRolePermissionDto> permissionsByRoleId(Long roleId) {
-        return permissionsByRoleIds(Lists.newArrayList(roleId));
+        return permissionsByRoleIds(Sets.newHashSet(roleId));
     }
 
     @Override
-    public Set<PandaRolePermissionDto> permissionsByRoleIds(List<Long> roleIds) {
+    public Set<PandaRolePermissionDto> permissionsByRoleIds(Set<Long> roleIds) {
         PandaRolePermission query = new PandaRolePermission();
         query.setDelState(DelState.NO.getId());
         QueryWrapper<PandaRolePermission> queryWrapper = new QueryWrapper<>(query);
@@ -66,7 +66,7 @@ public class PandaRoleServiceImpl
 
     @Override
     public Set<Long> filterRoles(Set<Long> roleIds, List<Long> envCodes, Long appCode) {
-        if (Objects.isNull(roleIds) || roleIds.isEmpty()){
+        if (Objects.isNull(roleIds) || roleIds.isEmpty()) {
             return roleIds;
         }
         PandaRole query = new PandaRole();
@@ -93,7 +93,6 @@ public class PandaRoleServiceImpl
         List<PandaRolePermission> list = pandaRolePermissionMapper.selectList(queryWrapper);
         return Optional.ofNullable(list).orElse(Lists.newArrayList()).stream()
                 .map(t -> t.getPermissionId())
-                .distinct()
                 .collect(Collectors.toSet());
 
     }
@@ -138,5 +137,19 @@ public class PandaRoleServiceImpl
         delete.setDelState(DelState.YES.getId());
         delete.setUpdateTime(LocalDateTime.now());
         return pandaRolePermissionMapper.updateById(delete);
+    }
+
+    @Override
+    public Set<Long> roleIds(List<Long> envCodes, Long appCode) {
+        PandaRole query = new PandaRole();
+        query.setDelState(DelState.NO.getId());
+        query.setAppCode(appCode);
+        QueryWrapper<PandaRole> queryWrapper = new QueryWrapper<>(query);
+        queryWrapper.in("env_code", envCodes);
+        queryWrapper.select("id");
+        queryWrapper.nonEmptyOfEntity();
+        List<PandaRole> list = pandaRoleMapper.selectList(queryWrapper);
+        return Optional.ofNullable(list).orElse(Lists.newArrayList()).stream()
+                .map(t -> t.getId()).collect(Collectors.toSet());
     }
 }

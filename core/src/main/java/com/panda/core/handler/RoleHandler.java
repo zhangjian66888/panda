@@ -4,8 +4,10 @@ import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import com.panda.common.enums.MenuType;
 import com.panda.core.dto.PandaPermissionDto;
+import com.panda.core.dto.PandaRolePermissionDto;
 import com.panda.core.dto.PermissionDto;
-import com.panda.core.security.PandaGrantedAuthority;
+import com.panda.core.security.GrantedAuthority;
+import com.panda.core.service.IPandaEnvService;
 import com.panda.core.service.IPandaPermissionService;
 import com.panda.core.service.IPandaRoleService;
 import lombok.extern.slf4j.Slf4j;
@@ -33,7 +35,10 @@ public class RoleHandler {
     @Autowired
     private IPandaPermissionService iPandaPermissionService;
 
-    public List<PandaGrantedAuthority> authoritiesByRoleIds(Set<Long> roleIds) {
+    @Autowired
+    private IPandaEnvService iPandaEnvService;
+
+    public List<GrantedAuthority> authoritiesByRoleIds(Set<Long> roleIds) {
 
         Set<Long> permissionIds = iPandaRoleService.permissionIdsByRoleIds(roleIds);
         if (Objects.isNull(permissionIds) || permissionIds.isEmpty()) {
@@ -42,7 +47,7 @@ public class RoleHandler {
         List<PandaPermissionDto> permissionDtos = iPandaPermissionService.findListByIds(permissionIds);
 
         return Optional.ofNullable(permissionDtos).orElse(Lists.newArrayList())
-                .stream().map(t -> PandaGrantedAuthority.builder()
+                .stream().map(t -> GrantedAuthority.builder()
                         .id(t.getId())
                         .name(t.getName())
                         .showName(t.getShowName())
@@ -92,6 +97,25 @@ public class RoleHandler {
         return PermissionDto.builder().permissions(persmissons)
                 .menuItems(menus)
                 .build();
+    }
+
+    public Map<Long, Set<Long>> rolePermissions(String profile, Long appCode) {
+        List<Long> envCodes = iPandaEnvService.profileToCode(profile.split(","));
+        Set<Long> roleIds = iPandaRoleService.roleIds(envCodes, appCode);
+        if (Objects.isNull(roleIds) || roleIds.isEmpty()) {
+            return Maps.newHashMap();
+        }
+        Set<PandaRolePermissionDto> permissions = iPandaRoleService.permissionsByRoleIds(roleIds);
+        Map<Long, Set<Long>> map = Maps.newHashMap();
+        for (PandaRolePermissionDto dto : permissions) {
+            Set<Long> tmp = map.get(dto.getRoleId());
+            if (Objects.isNull(tmp)) {
+                tmp = new HashSet<>();
+                map.put(dto.getRoleId(), tmp);
+            }
+            tmp.add(dto.getPermissionId());
+        }
+        return map;
     }
 
 }

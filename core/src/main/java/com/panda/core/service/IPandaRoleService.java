@@ -21,7 +21,7 @@ public interface IPandaRoleService extends IBaseService<PandaRole, PandaRoleDto,
 
     Set<PandaRolePermissionDto> permissionsByRoleId(Long roleId);
 
-    Set<PandaRolePermissionDto> permissionsByRoleIds(List<Long> roleIds);
+    Set<PandaRolePermissionDto> permissionsByRoleIds(Set<Long> roleIds);
 
     Set<Long> filterRoles(Set<Long> roleIds, List<Long> envCodes, Long appCode);
 
@@ -33,4 +33,5 @@ public interface IPandaRoleService extends IBaseService<PandaRole, PandaRoleDto,
 
     int deletePermission(PandaRolePermissionDto dto);
 
+    Set<Long> roleIds(List<Long> envCodes, Long appCode);
 }

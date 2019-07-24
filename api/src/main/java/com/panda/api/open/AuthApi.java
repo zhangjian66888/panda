@@ -1,7 +1,7 @@
 package com.panda.api.open;
 
 import com.panda.api.consts.ApiConst;
-import com.panda.api.dto.AuthAuthority;
+import com.panda.api.dto.AuthResource;
 import com.panda.api.dto.AuthUser;
 import com.panda.common.dto.ResultDto;
 import org.springframework.web.bind.annotation.RequestHeader;
@@ -34,9 +34,9 @@ public interface AuthApi {
      */
     @RequestMapping(value = "/user", method = RequestMethod.GET)
     ResultDto<AuthUser> userByToken(@RequestHeader("appCode") Long appCode,
-                          @RequestHeader("secret") String secret,
-                          @RequestHeader("profile") String profile,
-                          @RequestParam("token") String token);
+                                    @RequestHeader("secret") String secret,
+                                    @RequestHeader("profile") String profile,
+                                    @RequestParam("token") String token);
 
     /**
      * 获取应用对应环境的权限信息
@@ -46,10 +46,11 @@ public interface AuthApi {
      * @param profile 环境
      * @return
      */
-    @RequestMapping(value = "/authorities", method = RequestMethod.GET)
-    ResultDto<List<AuthAuthority>> authorities(@RequestHeader("appCode") Long appCode,
-                                    @RequestHeader("secret") String secret,
-                                    @RequestHeader("profile") String profile);
+    @RequestMapping(value = "/resources", method = RequestMethod.GET)
+    ResultDto<List<AuthResource>> resources(
+            @RequestHeader("appCode") Long appCode,
+            @RequestHeader("secret") String secret,
+            @RequestHeader("profile") String profile);
 
     /**
      * 获取所有角色对应的权限列表
@@ -59,8 +60,9 @@ public interface AuthApi {
      * @param profile 环境
      * @return
      */
-    @RequestMapping(value = "/role", method = RequestMethod.GET)
-    ResultDto<Map<Long, Set<Long>>> role(@RequestHeader("appCode") Long appCode,
-                              @RequestHeader("secret") String secret,
-                              @RequestHeader("profile") String profile);
+    @RequestMapping(value = "/roles", method = RequestMethod.GET)
+    ResultDto<Map<Long, Set<Long>>> roles(
+            @RequestHeader("appCode") Long appCode,
+            @RequestHeader("secret") String secret,
+            @RequestHeader("profile") String profile);
 }

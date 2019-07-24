@@ -7,8 +7,6 @@ import com.panda.core.mapper.PandaPermissionMapper;
 import com.panda.core.service.IPandaPermissionService;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
-
 /**
  * <p>
  * 服务实现类
