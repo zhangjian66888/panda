@@ -6,10 +6,9 @@ import com.panda.client.filter.AuthUserContext;
 import com.panda.client.handler.RoleHandler;
 import com.panda.common.dto.StatusDto;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.*;
-
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RestController;
 
 /**
  * com.panda.client.controller.AuthController
@@ -30,17 +29,4 @@ public class AuthController {
         AuthUser user = AuthUserContext.getContext();
         return StatusDto.SUCCESS().setData(roleHandler.permissionsByRoleIds(user.getRoleIds()));
     }
-/*
-    @RequestMapping(value = "login", method = RequestMethod.GET)
-    public StatusDto login() {
-        return StatusDto.SUCCESS();
-    }
-
-    @RequestMapping(value = "success", method = RequestMethod.GET)
-    public StatusDto success(@RequestParam(value = "token",required = false, defaultValue = "") String token,
-                             @RequestParam(value = "timeCode",required = false, defaultValue = "")String timeCode) {
-
-        return StatusDto.SUCCESS();
-    }*/
-
 }

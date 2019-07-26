@@ -6,7 +6,6 @@ import com.panda.client.config.AuthProperties;
 import com.panda.common.dto.ResultDto;
 import com.panda.common.exception.PandaException;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Component;
 
 /**

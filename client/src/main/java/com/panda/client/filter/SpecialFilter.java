@@ -43,11 +43,6 @@ public class SpecialFilter extends AbstractFilter {
             HttpSession session = request.getSession();
             session.setAttribute("Authorization", token);
             session.setMaxInactiveInterval(60 * 60 * 24 * 30);
-            /*Cookie cookie = new Cookie("Authorization", token);
-            cookie.setMaxAge(60 * 60 * 24 * 30);
-            cookie.setPath("/");
-            cookie.setDomain("localhost:9090");
-            response.addCookie(cookie);*/
             String homePage = Optional.ofNullable(authProperties.getHomePage()).orElse("/");
             response.sendRedirect(homePage);
             return false;
