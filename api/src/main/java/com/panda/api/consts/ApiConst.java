@@ -9,4 +9,10 @@ package com.panda.api.consts;
  */
 public interface ApiConst {
     String API_REQUEST_PREFIX = "/panda/api/";
+
+    String LOGIN_REQUEST_PREFIX = "/login";
+
+    String SUCCESS_REQUEST_PREFIX = "/success";
+
+    int FILTER_ORDER = -200;
 }

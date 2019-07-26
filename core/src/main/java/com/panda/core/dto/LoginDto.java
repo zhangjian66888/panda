@@ -34,6 +34,7 @@ public class LoginDto {
     private Long appCode;
     private String profile;
     private String secret;
-    private String redirectUrl;
+    private String callback;
+    private String level;
 
 }

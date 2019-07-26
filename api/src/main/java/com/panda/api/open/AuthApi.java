@@ -33,9 +33,9 @@ public interface AuthApi {
      * @return
      */
     @RequestMapping(value = "/user", method = RequestMethod.GET)
-    ResultDto<AuthUser> userByToken(@RequestHeader("appCode") Long appCode,
-                                    @RequestHeader("secret") String secret,
-                                    @RequestHeader("profile") String profile,
+    ResultDto<AuthUser> userByToken(@RequestParam("appCode") Long appCode,
+                                    @RequestParam("secret") String secret,
+                                    @RequestParam("profile") String profile,
                                     @RequestParam("token") String token);
 
     /**
@@ -48,9 +48,9 @@ public interface AuthApi {
      */
     @RequestMapping(value = "/resources", method = RequestMethod.GET)
     ResultDto<List<AuthResource>> resources(
-            @RequestHeader("appCode") Long appCode,
-            @RequestHeader("secret") String secret,
-            @RequestHeader("profile") String profile);
+            @RequestParam("appCode") Long appCode,
+            @RequestParam("secret") String secret,
+            @RequestParam("profile") String profile);
 
     /**
      * 获取所有角色对应的权限列表
@@ -62,7 +62,7 @@ public interface AuthApi {
      */
     @RequestMapping(value = "/roles", method = RequestMethod.GET)
     ResultDto<Map<Long, Set<Long>>> roles(
-            @RequestHeader("appCode") Long appCode,
-            @RequestHeader("secret") String secret,
-            @RequestHeader("profile") String profile);
+            @RequestParam("appCode") Long appCode,
+            @RequestParam("secret") String secret,
+            @RequestParam("profile") String profile);
 }

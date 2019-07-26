@@ -17,18 +17,18 @@ import lombok.*;
 @AllArgsConstructor
 public class ResultDto<T> {
 
-    public static Integer CODE_SUCESS = 0;
-    public static Integer CODE_ERROR = 1;
-    public static Integer CODE_NOT_LOGIN = -100;
+    public static int CODE_SUCESS = 0;
+    public static int CODE_ERROR = 1;
+    public static int CODE_NOT_LOGIN = -100;
     public static String CODE_SUCESS_MSG = "操作成功";
     public static String CODE_ERROR_MSG = "操作失败";
 
-    private Integer code;
+    private int code;
     private String msg;
 
     private T data;
 
-    public ResultDto setCode(Integer code) {
+    public ResultDto setCode(int code) {
         this.code = code;
         return this;
     }

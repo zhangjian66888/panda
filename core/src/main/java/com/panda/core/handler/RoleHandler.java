@@ -99,8 +99,8 @@ public class RoleHandler {
                 .build();
     }
 
-    public Map<Long, Set<Long>> rolePermissions(String profile, Long appCode) {
-        List<Long> envCodes = iPandaEnvService.profileToCode(profile.split(","));
+    public Map<Long, Set<Long>> rolePermissions(Long appCode, String[] profiles) {
+        List<Long> envCodes = iPandaEnvService.profileToCode(profiles);
         Set<Long> roleIds = iPandaRoleService.roleIds(envCodes, appCode);
         if (Objects.isNull(roleIds) || roleIds.isEmpty()) {
             return Maps.newHashMap();

@@ -9,7 +9,7 @@ import com.panda.core.dto.PandaUserDto;
 import com.panda.core.security.SecurityUser;
 import com.panda.core.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.ApplicationContext;
+import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Component;
 
 import javax.servlet.http.HttpServletResponse;
@@ -34,7 +34,7 @@ public class UserHandler {
     private ConfigProperties configProperties;
 
     @Autowired
-    private ApplicationContext applicationContext;
+    private Environment environment;
 
     @Autowired
     private IPandaUserService iPandaUserService;
@@ -52,16 +52,17 @@ public class UserHandler {
     private IPandaEnvService iPandaEnvService;
 
     public SecurityUser verifyToken(String token) {
-        List<Long> envCodes = iPandaEnvService.profileToCode(applicationContext.getEnvironment().getActiveProfiles());
+        List<Long> envCodes = iPandaEnvService.profileToCode(environment.getActiveProfiles());
         Long appCode = configProperties.getAppCode();
-        return verifyToken(token, envCodes, appCode);
+        return verifyToken(token, appCode, envCodes);
     }
 
-    public SecurityUser verifyToken(String token, String profile, Long appCode) {
-        List<Long> envCodes = iPandaEnvService.profileToCode(profile.split(","));
-        return verifyToken(token, envCodes, appCode);
+    public SecurityUser verifyToken(String token, Long appCode, String[] profiles) {
+        List<Long> envCodes = iPandaEnvService.profileToCode(profiles);
+        return verifyToken(token, appCode, envCodes);
     }
-    public SecurityUser verifyToken(String token, List<Long> envCodes, Long appCode) {
+
+    public SecurityUser verifyToken(String token, Long appCode, List<Long> envCodes) {
         PandaTokenDto tokenDto = iPandaTokenService.validToken(token);
         if (Objects.isNull(tokenDto)) {
             throw new LoginException(HttpServletResponse.SC_UNAUTHORIZED, "token expire");
@@ -78,7 +79,7 @@ public class UserHandler {
         Set<Long> roleIds = Sets.newHashSet();
         roleIds.addAll(userRoleIds);
         roleIds.addAll(groupRoleIds);
-        roleIds = iPandaRoleService.filterRoles(roleIds, envCodes, appCode);
+        roleIds = iPandaRoleService.filterRoles(roleIds, appCode, envCodes);
         return SecurityUser.builder()
                 .userId(userDto.getId())
                 .username(userDto.getUsername())

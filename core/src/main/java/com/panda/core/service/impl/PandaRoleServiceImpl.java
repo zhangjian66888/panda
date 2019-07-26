@@ -65,7 +65,7 @@ public class PandaRoleServiceImpl
     }
 
     @Override
-    public Set<Long> filterRoles(Set<Long> roleIds, List<Long> envCodes, Long appCode) {
+    public Set<Long> filterRoles(Set<Long> roleIds, Long appCode, List<Long> envCodes) {
         if (Objects.isNull(roleIds) || roleIds.isEmpty()) {
             return roleIds;
         }
@@ -99,7 +99,7 @@ public class PandaRoleServiceImpl
 
     @Override
     public Set<Long> permissionIdsByRoleIds(Set<Long> roleIds, List<Long> envCodes, Long appCode) {
-        return Optional.ofNullable(filterRoles(roleIds, envCodes, appCode))
+        return Optional.ofNullable(filterRoles(roleIds, appCode, envCodes))
                 .filter(t -> !t.isEmpty()).map(t -> permissionIdsByRoleIds(t)).orElse(Sets.newHashSet());
     }
 

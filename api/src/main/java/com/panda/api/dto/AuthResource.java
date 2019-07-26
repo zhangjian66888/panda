@@ -18,6 +18,8 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class AuthResource {
 
+    private Long resourceId;
+
     private String name;
 
     private String showName;

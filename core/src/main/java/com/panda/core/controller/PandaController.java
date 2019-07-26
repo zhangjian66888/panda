@@ -27,7 +27,7 @@ public class PandaController {
     private LoginHandler loginHandler;
 
     @Autowired
-    private RoleHandler securityRoleHandler;
+    private RoleHandler roleHandler;
 
     @PostMapping("login")
     public StatusDto login(@Valid @RequestBody LoginDto loginDto) {
@@ -38,7 +38,7 @@ public class PandaController {
     @GetMapping("permissions")
     public StatusDto permissions() {
         SecurityUser user = SecurityUserContext.getContext();
-        return StatusDto.SUCCESS().setData(securityRoleHandler.permissionsByRoleIds(user.getRoleIds()));
+        return StatusDto.SUCCESS().setData(roleHandler.permissionsByRoleIds(user.getRoleIds()));
     }
 
 }

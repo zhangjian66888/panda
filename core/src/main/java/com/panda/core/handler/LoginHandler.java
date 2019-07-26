@@ -68,6 +68,8 @@ public class LoginHandler {
         }
         successDto.setExpireTime(expireTime);
         successDto.setZhName(pandaUserDto.getZhName());
+        successDto.setCallback(dto.getCallback());
+        successDto.setLevel(dto.getLevel());
         iPandaTokenService.insertOrUpdate(update);
         return successDto;
     }

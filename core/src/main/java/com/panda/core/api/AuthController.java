@@ -45,7 +45,7 @@ public class AuthController extends ApiBaseController implements AuthApi {
             @RequestHeader("profile") String profile,
             @RequestParam("token") String token) {
         verifyApp(appCode, secret, profile);
-        SecurityUser securityUser = userHandler.verifyToken(token, profile, appCode);
+        SecurityUser securityUser = userHandler.verifyToken(token, appCode, profiles(profile));
         if (Objects.isNull(securityUser)) {
             throw new AuthException("用户token认证失败");
         }
@@ -69,6 +69,7 @@ public class AuthController extends ApiBaseController implements AuthApi {
         List<AuthResource> resources = Optional.ofNullable(permissions)
                 .orElse(Lists.newArrayList()).stream()
                 .map(t -> AuthResource.builder()
+                        .resourceId(t.getId())
                         .name(t.getName())
                         .showName(t.getShowName())
                         .url(t.getUrl())
@@ -92,6 +93,6 @@ public class AuthController extends ApiBaseController implements AuthApi {
             @RequestHeader("profile") String profile) {
         verifyApp(appCode, secret, profile);
 
-        return ResultDto.SUCCESS().setData(roleHandler.rolePermissions(profile, appCode));
+        return ResultDto.SUCCESS().setData(roleHandler.rolePermissions(appCode, profiles(profile)));
     }
 }

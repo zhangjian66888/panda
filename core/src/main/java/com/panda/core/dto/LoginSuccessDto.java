@@ -28,6 +28,8 @@ public class LoginSuccessDto {
 
     private String timeCode;
 
-    private String redirectUrl;
+    private String callback;
+
+    private String level;
 
 }

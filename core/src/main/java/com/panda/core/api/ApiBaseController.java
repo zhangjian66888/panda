@@ -20,10 +20,14 @@ public class ApiBaseController {
     protected IPandaAppService iPandaAppService;
 
     protected void verifyApp(Long appCode, String secret, String profile) {
-        PandaAppSecretDto secretDto = iPandaAppService.secret(appCode, secret, profile.split(","));
-        if (Objects.isNull(secretDto)){
+        PandaAppSecretDto secretDto = iPandaAppService.secret(appCode, secret, profiles(profile));
+        if (Objects.isNull(secretDto)) {
             throw new AuthException("应用认证失败");
         }
+    }
+
+    protected String[] profiles(String profile) {
+        return profile.split(",");
     }
 
 }
