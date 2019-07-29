@@ -75,7 +75,7 @@ public abstract class AbstractFilter extends GenericFilterBean {
             throws PandaFilterException, IOException;
 
     private void handlerException(HttpServletRequest request, HttpServletResponse response, LoginException e) throws IOException {
-        String url = PathUtil.urlJoin(authProperties.getFrontHost(), ApiConst.LOGIN_REQUEST_PREFIX);
+        String url = PathUtil.urlJoin(authProperties.getFrontHost(), ApiConst.LOGIN_PAGE);
         String callback = PathUtil.urlJoin(originHost(request), AuthConst.AUTH_REQUEST_PREFIX, ApiConst.SUCCESS_REQUEST_PREFIX);
         url = url.concat("?callback=").concat(callback);
         url = url.concat("&level=" + authProperties.getLevel());
@@ -121,7 +121,7 @@ public abstract class AbstractFilter extends GenericFilterBean {
                 String[] tmp = referer.split("://");
                 host = tmp[0].concat("://") + tmp[1].split("/")[0];
             } else {
-                host = request.getHeader("host");
+                host = "http://".concat(request.getHeader("host"));
             }
         }
         return host;

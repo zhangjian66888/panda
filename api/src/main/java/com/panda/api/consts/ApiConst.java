@@ -10,7 +10,9 @@ package com.panda.api.consts;
 public interface ApiConst {
     String API_REQUEST_PREFIX = "/panda/api/";
 
-    String LOGIN_REQUEST_PREFIX = "/login";
+    String LOGIN_PAGE = "/login.html";
+    String LOGIN_REQUEST = "/login";
+    String LOGOUT_REQUEST = "/logout";
 
     String SUCCESS_REQUEST_PREFIX = "/success";
 

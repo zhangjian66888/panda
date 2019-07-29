@@ -14,6 +14,7 @@
         <module>core</module>
         <module>admin</module>
         <module>client</module>
+        <module>client-v1</module>
     </modules>
 
     <properties>
@@ -29,6 +30,7 @@
         <lombok.version>1.18.8</lombok.version>
         <guava.version>28.0-jre</guava.version>
         <fastjson.version>1.2.58</fastjson.version>
+        <feigin.version>10.2.3</feigin.version>
     </properties>
 
 
@@ -52,6 +54,18 @@
             <dependency>
                 <groupId>com.panda</groupId>
                 <artifactId>panda-api</artifactId>
+                <version>${version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>com.panda</groupId>
+                <artifactId>panda-client</artifactId>
+                <version>${version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>com.panda</groupId>
+                <artifactId>panda-client-v1</artifactId>
                 <version>${version}</version>
             </dependency>
            <!-- <dependency>
@@ -78,6 +92,12 @@
                 <artifactId>mybatis-plus-boot-starter</artifactId>
                 <version>${mybatis-plus.version}</version>
             </dependency>
+            <dependency>
+                <groupId>io.github.openfeign</groupId>
+                <artifactId>feign-gson</artifactId>
+                <version>${feigin.version}</version>
+            </dependency>
+
             <dependency>
                 <groupId>com.baomidou</groupId>
                 <artifactId>mybatis-plus-generator</artifactId>

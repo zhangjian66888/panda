@@ -34,8 +34,17 @@ public class SpecialFilter extends AbstractFilter {
     @Override
     public boolean doingFilter(HttpServletRequest request, HttpServletResponse response) throws PandaFilterException, IOException {
         if (request.getRequestURI()
-                .endsWith(PathUtil.urlJoin(AuthConst.AUTH_REQUEST_PREFIX, ApiConst.LOGIN_REQUEST_PREFIX))) {
+                .endsWith(PathUtil.urlJoin(AuthConst.AUTH_REQUEST_PREFIX, ApiConst.LOGIN_REQUEST))
+                || request.getRequestURI().equalsIgnoreCase(ApiConst.LOGIN_REQUEST)) {
             throw new LoginException(HttpServletResponse.SC_UNAUTHORIZED, "login");
+        }
+        if (request.getRequestURI()
+                .endsWith(PathUtil.urlJoin(AuthConst.AUTH_REQUEST_PREFIX, ApiConst.LOGOUT_REQUEST))
+                || request.getRequestURI().equalsIgnoreCase(ApiConst.LOGOUT_REQUEST)) {
+            request.getSession().invalidate();
+            String homePage = Optional.ofNullable(authProperties.getHomePage()).orElse("/");
+            response.sendRedirect(homePage);
+            return false;
         }
         if (request.getRequestURI()
                 .endsWith(PathUtil.urlJoin(AuthConst.AUTH_REQUEST_PREFIX, ApiConst.SUCCESS_REQUEST_PREFIX))) {

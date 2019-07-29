@@ -23,6 +23,11 @@
             <artifactId>spring-cloud-starter-openfeign</artifactId>
         </dependency>
         <dependency>
+            <groupId>io.github.openfeign</groupId>
+            <artifactId>feign-gson</artifactId>
+        </dependency>
+
+        <dependency>
             <groupId>com.google.guava</groupId>
             <artifactId>guava</artifactId>
         </dependency>
@@ -37,7 +42,7 @@
     </dependencies>
 
     <build>
-        <finalName>panda-common-${project.version}</finalName>
+        <finalName>panda-client-${project.version}</finalName>
     </build>
 
 </project>
