@@ -14,4 +14,6 @@ public interface CoreConst {
     long TOKEN_VALID_DAY = 30L;
 
     int FILTER_ORDER = -200;
+
+    String ADMIN_ROLE = "ADMIN";
 }

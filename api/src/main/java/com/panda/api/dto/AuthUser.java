@@ -5,6 +5,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.List;
 import java.util.Set;
 
 /**
@@ -29,4 +30,7 @@ public class AuthUser {
     private Set<Long> roleIds;
 
     private Boolean superman;
+
+    private List<AuthResource> resources;
+
 }

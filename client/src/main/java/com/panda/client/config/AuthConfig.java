@@ -38,6 +38,11 @@ public class AuthConfig {
     }
 
     @Bean
+    public SessionRedisProperties sessionRedisProperties() {
+        return new SessionRedisProperties();
+    }
+
+    @Bean
     public AuthClient authClient() {
         return Client.createDefalut(AuthClient.class, authProperties.getBackHost());
     }

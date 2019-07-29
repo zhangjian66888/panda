@@ -1,5 +1,6 @@
 package com.panda.client.filter;
 
+import com.panda.api.dto.AuthResource;
 import com.panda.api.dto.AuthUser;
 
 /**
@@ -26,5 +27,14 @@ public class AuthUserContext {
         contextHolder.set(context);
     }
 
+    public static boolean checkPermission(String permission) {
+        AuthUser authUser = contextHolder.get();
+        for (AuthResource ga : authUser.getResources()) {
+            if (permission.equals(ga.getName())) {
+                return true;
+            }
+        }
+        return false;
+    }
 
 }

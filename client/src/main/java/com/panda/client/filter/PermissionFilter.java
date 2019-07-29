@@ -3,10 +3,8 @@ package com.panda.client.filter;
 import com.panda.api.consts.ApiConst;
 import com.panda.api.dto.AuthResource;
 import com.panda.api.dto.AuthUser;
-import com.panda.client.handler.RoleHandler;
 import com.panda.common.exception.PermissionException;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
@@ -27,9 +25,6 @@ import java.util.List;
 @Slf4j
 public class PermissionFilter extends AbstractFilter {
 
-    @Autowired
-    private RoleHandler roleHandler;
-
     public PermissionFilter() {
         log.info("==================================PermissionFilter===============");
     }
@@ -37,7 +32,7 @@ public class PermissionFilter extends AbstractFilter {
     @Override
     public boolean doingFilter(HttpServletRequest request, HttpServletResponse response) {
         AuthUser user = AuthUserContext.getContext();
-        List<AuthResource> resources = roleHandler.resourceByRoleIds(user.getRoleIds());
+        List<AuthResource> resources = user.getResources();
         String url;
         String method;
         AntPathRequestMatcher matcher;

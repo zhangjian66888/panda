@@ -17,4 +17,6 @@ public interface ApiConst {
     String SUCCESS_REQUEST_PREFIX = "/success";
 
     int FILTER_ORDER = -200;
+
+    String TOKEN_KEY = "Authorization";
 }

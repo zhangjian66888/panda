@@ -3,7 +3,9 @@ package com.panda.client.filter;
 import com.google.common.cache.Cache;
 import com.google.common.cache.CacheBuilder;
 import com.panda.api.consts.ApiConst;
+import com.panda.api.dto.AuthResource;
 import com.panda.api.dto.AuthUser;
+import com.panda.client.handler.RoleHandler;
 import com.panda.client.handler.UserHandler;
 import com.panda.common.exception.LoginException;
 import com.panda.common.exception.PandaFilterException;
@@ -15,6 +17,7 @@ import org.springframework.util.StringUtils;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.util.List;
 import java.util.Optional;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
@@ -32,11 +35,14 @@ import java.util.concurrent.TimeUnit;
 public class LoginFilter extends AbstractFilter {
 
     private Cache<String, AuthUser> userCache = CacheBuilder.newBuilder()
-            .expireAfterAccess(1L, TimeUnit.HOURS)
+            .expireAfterWrite(1L, TimeUnit.HOURS)
             .build();
 
     @Autowired
     private UserHandler userHandler;
+
+    @Autowired
+    private RoleHandler roleHandler;
 
     public LoginFilter() {
         log.info("==================================LoginFilter===============");
@@ -44,9 +50,9 @@ public class LoginFilter extends AbstractFilter {
 
     @Override
     public boolean doingFilter(HttpServletRequest request, HttpServletResponse response) throws PandaFilterException {
-        String token = request.getHeader("Authorization");
+        String token = request.getHeader(ApiConst.TOKEN_KEY);
         if (!StringUtils.hasLength(token)) {
-            token = Optional.ofNullable(request.getSession().getAttribute("Authorization"))
+            token = Optional.ofNullable(request.getSession().getAttribute(ApiConst.TOKEN_KEY))
                     .map(t -> t.toString()).orElse(null);
         }
         if (!StringUtils.hasLength(token)) {
@@ -59,6 +65,9 @@ public class LoginFilter extends AbstractFilter {
         } catch (ExecutionException e) {
             throw new LoginException(HttpServletResponse.SC_UNAUTHORIZED, e.getMessage());
         }
+
+        List<AuthResource> resources = roleHandler.resourceByRoleIds(authUser.getRoleIds());
+        authUser.setResources(resources);
         AuthUserContext.setContext(authUser);
         return true;
     }
