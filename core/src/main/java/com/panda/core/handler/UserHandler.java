@@ -1,8 +1,10 @@
 package com.panda.core.handler;
 
 import com.google.common.collect.Sets;
+import com.panda.common.enums.AppOwnerType;
 import com.panda.common.exception.LoginException;
 import com.panda.core.config.ConfigProperties;
+import com.panda.core.dto.PandaAppOwnerDto;
 import com.panda.core.dto.PandaGroupUserDto;
 import com.panda.core.dto.PandaTokenDto;
 import com.panda.core.dto.PandaUserDto;
@@ -51,6 +53,9 @@ public class UserHandler {
     @Autowired
     private IPandaEnvService iPandaEnvService;
 
+    @Autowired
+    private IPandaAppService iPandaAppService;
+
     public SecurityUser verifyToken(String token) {
         List<Long> envCodes = iPandaEnvService.profileToCode(environment.getActiveProfiles());
         Long appCode = configProperties.getAppCode();
@@ -68,6 +73,14 @@ public class UserHandler {
             throw new LoginException(HttpServletResponse.SC_UNAUTHORIZED, "token expire");
         }
         PandaUserDto userDto = iPandaUserService.findById(tokenDto.getUserId());
+        boolean superman = false;
+        if (Objects.nonNull(appCode)) {
+            PandaAppOwnerDto owner = iPandaAppService.findByAppCodeOwnerId(appCode, userDto.getId());
+            if (Objects.nonNull(owner) && AppOwnerType.ADMIN.getId() == owner.getOwnerType()) {
+                superman = true;
+            }
+        }
+
         List<PandaGroupUserDto> userGroups = iPandaGroupService.groupsByUserId(userDto.getId());
         Set<Long> groupIds = Sets.newHashSet(userDto.getGroupId());
         Optional.ofNullable(userGroups).filter(t -> !t.isEmpty())
@@ -87,6 +100,7 @@ public class UserHandler {
                 .email(userDto.getEmail())
                 .zhName(userDto.getZhName())
                 .roleIds(roleIds)
+                .superman(superman)
                 .build();
 
     }

@@ -19,7 +19,7 @@ import java.util.Set;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class PermissionDto {
+public class ResourceDto {
 
     private List<String> permissions;
 

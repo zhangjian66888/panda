@@ -54,6 +54,7 @@ public class AuthController extends ApiBaseController implements AuthApi {
                 .username(securityUser.getUsername())
                 .zhName(securityUser.getZhName())
                 .roleIds(securityUser.getRoleIds())
+                .superman(securityUser.getSuperman())
                 .build();
         return ResultDto.SUCCESS().setData(authUser);
     }

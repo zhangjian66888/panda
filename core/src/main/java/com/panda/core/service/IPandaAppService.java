@@ -31,4 +31,6 @@ public interface IPandaAppService extends IBaseService<PandaApp, PandaAppDto, Pa
 
     int deleteOwner(PandaAppOwnerDto dto);
 
+    PandaAppOwnerDto findByAppCodeOwnerId(Long appCode, Long ownerId);
+
 }

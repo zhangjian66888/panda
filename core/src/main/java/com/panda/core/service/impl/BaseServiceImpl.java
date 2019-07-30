@@ -126,14 +126,29 @@ public class BaseServiceImpl<M extends BaseMapper<E>, E extends BaseEntity, D ex
 
     @Override
     public List<D> find(D dto) {
-        E query = BeanUtil.transBean(dto, clzE);
-        query.setDelState(DelState.NO.getId());
-        QueryWrapper<E> queryWrapper = new QueryWrapper<>(query);
-        queryWrapper.nonEmptyOfEntity();
-        List<E> list = super.list(queryWrapper);
+        List<E> list = finding(dto);
         return Optional.ofNullable(list).orElse(Lists.newArrayList())
                 .stream().map(t -> BeanUtil.transBean(t, clzD)).collect(Collectors.toList());
 
+    }
+
+    @Override
+    public List<Long> findIds(D dto) {
+        List<E> list = finding(dto, "id");
+        return Optional.ofNullable(list).orElse(Lists.newArrayList())
+                .stream().map(t -> t.getId()).collect(Collectors.toList());
+    }
+
+    public List<E> finding(D dto, String... select) {
+        E query = BeanUtil.transBean(dto, clzE);
+        query.setDelState(DelState.NO.getId());
+        QueryWrapper<E> queryWrapper = new QueryWrapper<>(query);
+        if (Objects.nonNull(select) && select.length > 0) {
+            queryWrapper.select(select);
+        }
+        queryWrapper.nonEmptyOfEntity();
+        List<E> list = super.list(queryWrapper);
+        return list;
     }
 
     @Override

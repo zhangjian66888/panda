@@ -176,4 +176,9 @@ public class PandaAppServiceImpl extends BaseServiceImpl<PandaAppMapper, PandaAp
         delete.setUpdateTime(LocalDateTime.now());
         return pandaAppOwnerMapper.updateById(delete);
     }
+
+    @Override
+    public PandaAppOwnerDto findByAppCodeOwnerId(Long appCode, Long ownerId) {
+        return iPandaAppOwnerService.findOne(PandaAppOwnerDto.builder().appCode(appCode).ownerId(ownerId).build());
+    }
 }

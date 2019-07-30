@@ -35,10 +35,10 @@ public class PandaController {
         return StatusDto.SUCCESS().setData(loginHandler.login(loginDto));
     }
 
-    @GetMapping("permissions")
-    public StatusDto permissions() {
+    @GetMapping("resources")
+    public StatusDto resources() {
         SecurityUser user = SecurityUserContext.getContext();
-        return StatusDto.SUCCESS().setData(roleHandler.permissionsByRoleIds(user.getRoleIds()));
+        return StatusDto.SUCCESS().setData(roleHandler.resourcesByRoleIds(user.getRoleIds(), user.getSuperman()));
     }
 
 }

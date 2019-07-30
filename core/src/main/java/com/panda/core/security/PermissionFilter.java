@@ -35,7 +35,7 @@ public class PermissionFilter extends AbstractFilter {
     @Override
     public void doingFilter(HttpServletRequest request, HttpServletResponse response) {
         SecurityUser user = SecurityUserContext.getContext();
-        List<GrantedAuthority> authorities = roleHandler.authoritiesByRoleIds(user.getRoleIds());
+        List<GrantedAuthority> authorities = roleHandler.authoritiesByRoleIds(user.getRoleIds(), user.getSuperman());
         String url;
         String method;
         AntPathRequestMatcher matcher;
@@ -53,6 +53,6 @@ public class PermissionFilter extends AbstractFilter {
                 }
             }
         }
-        throw new PermissionException(HttpServletResponse.SC_FORBIDDEN,"inadequate permissions");
+        throw new PermissionException(HttpServletResponse.SC_FORBIDDEN, "inadequate permissions");
     }
 }
