@@ -4,27 +4,25 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.google.common.collect.Lists;
 import com.panda.common.enums.CodeType;
 import com.panda.common.enums.DelState;
+import com.panda.common.exception.PandaException;
 import com.panda.common.util.BeanUtil;
 import com.panda.common.util.TokenUtil;
 import com.panda.core.dto.PandaAppDto;
+import com.panda.core.dto.PandaAppOwnerDto;
 import com.panda.core.dto.PandaAppSecretDto;
 import com.panda.core.dto.PandaEnvDto;
 import com.panda.core.dto.search.PandaAppSo;
 import com.panda.core.entity.PandaApp;
+import com.panda.core.entity.PandaAppOwner;
 import com.panda.core.entity.PandaAppSecret;
 import com.panda.core.mapper.PandaAppMapper;
-import com.panda.core.service.IPandaAppSecretService;
-import com.panda.core.service.IPandaAppService;
-import com.panda.core.service.IPandaCodeService;
-import com.panda.core.service.IPandaEnvService;
+import com.panda.core.mapper.PandaAppOwnerMapper;
+import com.panda.core.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.Objects;
-import java.util.Optional;
+import java.time.LocalDateTime;
+import java.util.*;
 import java.util.stream.Collectors;
 
 /**
@@ -47,6 +45,12 @@ public class PandaAppServiceImpl extends BaseServiceImpl<PandaAppMapper, PandaAp
 
     @Autowired
     private IPandaAppSecretService iPandaAppSecretService;
+
+    @Autowired
+    private IPandaAppOwnerService iPandaAppOwnerService;
+
+    @Autowired
+    private PandaAppOwnerMapper pandaAppOwnerMapper;
 
     @Override
     public boolean saveOrUpdate(PandaApp entity) {
@@ -100,7 +104,7 @@ public class PandaAppServiceImpl extends BaseServiceImpl<PandaAppMapper, PandaAp
     }
 
     @Override
-    public PandaAppSecretDto secret(Long code, String secret, String ...profiles) {
+    public PandaAppSecretDto secret(Long code, String secret, String... profiles) {
 
         PandaAppSecret tokenQuery = new PandaAppSecret() {{
             setDelState(DelState.NO.getId());
@@ -126,5 +130,50 @@ public class PandaAppServiceImpl extends BaseServiceImpl<PandaAppMapper, PandaAp
         dto.setSecret(TokenUtil.secret());
         iPandaAppSecretService.insertOrUpdate(dto);
         return dto.getSecret();
+    }
+
+    @Override
+    public List<PandaAppOwnerDto> listOwners(Long code) {
+        PandaAppOwnerDto query = PandaAppOwnerDto.builder().appCode(code).build();
+        List<PandaAppOwnerDto> owners = iPandaAppOwnerService.find(query);
+        return owners;
+    }
+
+    @Override
+    public int saveOwner(PandaAppOwnerDto dto) {
+        PandaAppOwner query = new PandaAppOwner();
+        query.setAppCode(dto.getAppCode());
+        query.setOwnerId(dto.getOwnerId());
+        query.setDelState(DelState.NO.getId());
+        PandaAppOwner pandaAppOwner = pandaAppOwnerMapper.selectOne(new QueryWrapper<>(query));
+        if (Objects.nonNull(pandaAppOwner)) {
+            throw new PandaException("请勿重复添加");
+        }
+        LocalDateTime now = LocalDateTime.now();
+        pandaAppOwner = new PandaAppOwner();
+        pandaAppOwner.setAppCode(dto.getAppCode());
+        pandaAppOwner.setOwnerId(dto.getOwnerId());
+        pandaAppOwner.setOwnerType(dto.getOwnerType());
+        pandaAppOwner.setCreateTime(now);
+        pandaAppOwner.setUpdateTime(now);
+        return pandaAppOwnerMapper.insert(pandaAppOwner);
+    }
+
+    @Override
+    public int deleteOwner(PandaAppOwnerDto dto) {
+        PandaAppOwner query = new PandaAppOwner();
+        query.setAppCode(dto.getAppCode());
+        query.setOwnerId(dto.getOwnerId());
+        query.setDelState(DelState.NO.getId());
+
+        PandaAppOwner pandaAppOwner = pandaAppOwnerMapper.selectOne(new QueryWrapper<>(query));
+        if (Objects.isNull(pandaAppOwner)) {
+            return 1;
+        }
+        PandaAppOwner delete = new PandaAppOwner();
+        delete.setId(pandaAppOwner.getId());
+        delete.setDelState(DelState.YES.getId());
+        delete.setUpdateTime(LocalDateTime.now());
+        return pandaAppOwnerMapper.updateById(delete);
     }
 }

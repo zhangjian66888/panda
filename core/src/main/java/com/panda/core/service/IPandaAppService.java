@@ -1,6 +1,7 @@
 package com.panda.core.service;
 
 import com.panda.core.dto.PandaAppDto;
+import com.panda.core.dto.PandaAppOwnerDto;
 import com.panda.core.dto.PandaAppSecretDto;
 import com.panda.core.dto.search.PandaAppSo;
 import com.panda.core.entity.PandaApp;
@@ -20,8 +21,14 @@ public interface IPandaAppService extends IBaseService<PandaApp, PandaAppDto, Pa
 
     List<PandaAppSecretDto> secretByAppCode(Long code);
 
-    PandaAppSecretDto secret(Long code, String secret, String ...profiles);
+    PandaAppSecretDto secret(Long code, String secret, String... profiles);
 
     String flushSecret(PandaAppSecretDto dto);
+
+    List<PandaAppOwnerDto> listOwners(Long code);
+
+    int saveOwner(PandaAppOwnerDto dto);
+
+    int deleteOwner(PandaAppOwnerDto dto);
 
 }

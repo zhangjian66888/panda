@@ -27,6 +27,6 @@ public class AuthController {
     @RequestMapping(value = "permissions", method = RequestMethod.GET)
     public StatusDto permissions() {
         AuthUser user = AuthUserContext.getContext();
-        return StatusDto.SUCCESS().setData(roleHandler.permissionsByRoleIds(user.getRoleIds()));
+        return StatusDto.SUCCESS().setData(roleHandler.permissionsByRoleIds(user.getRoleIds(), user.getSuperman()));
     }
 }

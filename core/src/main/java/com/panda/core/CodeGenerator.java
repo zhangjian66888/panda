@@ -127,7 +127,7 @@ public class CodeGenerator {
 //        strategy.setRestControllerStyle(false);
 //        strategy.setSuperControllerClass("com.panda.common.Controller.BaseController");
 //        strategy.setInclude(scanner("表名，多个英文逗号分割").split(","));
-        strategy.setInclude("panda_token".split(","));
+        strategy.setInclude(("panda_app_owner").split(","));
         strategy.setSuperEntityColumns("id");
         strategy.setControllerMappingHyphenStyle(true);
         strategy.setTablePrefix(pc.getModuleName() + "_");

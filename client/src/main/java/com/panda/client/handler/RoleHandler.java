@@ -6,6 +6,7 @@ import com.panda.api.dto.AuthPermission;
 import com.panda.api.dto.AuthResource;
 import com.panda.client.cache.AuthLocalCache;
 import com.panda.common.enums.MenuType;
+import com.panda.common.enums.PermissionType;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -25,20 +26,25 @@ public class RoleHandler {
     @Autowired
     private AuthLocalCache authLocalCache;
 
-    public List<AuthResource> resourceByRoleIds(Set<Long> roleIds) {
-        if (Objects.isNull(roleIds) || roleIds.isEmpty()){
+    public List<AuthResource> resourceByRoleIds(Set<Long> roleIds, boolean superman) {
+        if (Objects.isNull(roleIds) || roleIds.isEmpty()) {
             return Lists.newArrayList();
         }
         Set<Long> ids = authLocalCache.getIdsByRoleIds(roleIds);
-        if (Objects.isNull(ids) || ids.isEmpty()){
+        if (Objects.isNull(ids) || ids.isEmpty()) {
             return Lists.newArrayList();
+        }
+        if (Objects.nonNull(superman) && superman) {
+            Optional.ofNullable(authLocalCache.filterResourceByType(PermissionType.GENERAL.getId()))
+                    .filter(t -> !t.isEmpty())
+                    .ifPresent(t -> ids.addAll(t));
         }
         return authLocalCache.getResourceByIds(ids);
     }
 
-    public AuthPermission permissionsByRoleIds(Set<Long> roleIds) {
+    public AuthPermission permissionsByRoleIds(Set<Long> roleIds, boolean superman) {
 
-        List<AuthResource> resources = resourceByRoleIds(roleIds);
+        List<AuthResource> resources = resourceByRoleIds(roleIds, superman);
 
         Map<Long, AuthPermission.MenuItem> menuMap = Maps.newHashMap();
         List<AuthPermission.MenuItem> subMenus = Lists.newArrayList();

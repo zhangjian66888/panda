@@ -66,7 +66,7 @@ public class LoginFilter extends AbstractFilter {
             throw new LoginException(HttpServletResponse.SC_UNAUTHORIZED, e.getMessage());
         }
 
-        List<AuthResource> resources = roleHandler.resourceByRoleIds(authUser.getRoleIds());
+        List<AuthResource> resources = roleHandler.resourceByRoleIds(authUser.getRoleIds(), authUser.getSuperman());
         authUser.setResources(resources);
         AuthUserContext.setContext(authUser);
         return true;

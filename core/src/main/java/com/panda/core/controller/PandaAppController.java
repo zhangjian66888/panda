@@ -1,30 +1,29 @@
 package com.panda.core.controller;
 
-import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.google.common.collect.Lists;
 import com.panda.common.dto.SelectItemDto;
 import com.panda.common.dto.StatusDto;
-import com.panda.common.enums.DelState;
 import com.panda.common.util.SelectItemUtil;
 import com.panda.core.consts.CoreConst;
 import com.panda.core.dto.PandaAppDto;
+import com.panda.core.dto.PandaAppOwnerDto;
 import com.panda.core.dto.PandaAppSecretDto;
+import com.panda.core.dto.PandaUserDto;
 import com.panda.core.dto.search.PandaAppSo;
 import com.panda.core.entity.PandaApp;
-import com.panda.core.entity.PandaBusinessLine;
 import com.panda.core.service.IPandaAppService;
 import com.panda.core.service.IPandaBusinessLineService;
+import com.panda.core.service.IPandaUserService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.util.StringUtils;
+import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.util.List;
+import java.util.Map;
+import java.util.Objects;
+import java.util.Optional;
+import java.util.stream.Collectors;
 
 /**
  * com.panda.core.controller.PandaAppController
@@ -42,6 +41,9 @@ public class PandaAppController extends BaseController<PandaApp, PandaAppDto, Pa
 
     @Autowired
     private IPandaBusinessLineService iPandaBusinessLineService;
+
+    @Autowired
+    private IPandaUserService iPandaUserService;
 
     @Override
     protected List<PandaAppDto> decorateList(List<PandaAppDto> list) {
@@ -64,4 +66,33 @@ public class PandaAppController extends BaseController<PandaApp, PandaAppDto, Pa
         return StatusDto.SUCCESS().setData(iPandaAppService.flushSecret(dto));
     }
 
+    @GetMapping("/listOwners")
+    public StatusDto listOwners(@RequestParam("appCode") Long appCode) {
+        List<PandaAppOwnerDto> list = iPandaAppService.listOwners(appCode);
+        if (Objects.isNull(list) || list.isEmpty()) {
+            return StatusDto.SUCCESS();
+        }
+        List<Long> ids = list.stream().map(t -> t.getOwnerId()).collect(Collectors.toList());
+        Map<Long, PandaUserDto> map = Optional.ofNullable(iPandaUserService.findListByIds(ids))
+                .orElse(Lists.newArrayList())
+                .stream().collect(Collectors.toMap(t -> t.getId(), t -> t));
+        List<PandaAppOwnerDto> result = list.stream().map(t -> {
+            t.setOwnerName(Optional.ofNullable(map.get(t.getOwnerId())).map(o -> o.getZhName()).orElse(null));
+            return t;
+        }).filter(t -> StringUtils.hasLength(t.getOwnerName())).collect(Collectors.toList());
+        return StatusDto.SUCCESS().setData(result);
+    }
+
+    @PostMapping("/saveOwner")
+    public StatusDto saveOwner(@Valid @RequestBody PandaAppOwnerDto dto) {
+        iPandaAppService.saveOwner(dto);
+        return StatusDto.SUCCESS();
+    }
+
+    @PostMapping("/deleteOwner")
+    @ResponseBody
+    public StatusDto deleteOwner(@Valid @RequestBody PandaAppOwnerDto dto) {
+        iPandaAppService.deleteOwner(dto);
+        return StatusDto.SUCCESS();
+    }
 }

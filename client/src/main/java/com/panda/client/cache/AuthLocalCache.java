@@ -62,6 +62,11 @@ public class AuthLocalCache implements ApplicationRunner {
         }
     }
 
+    public Set<Long> filterResourceByType(int type) {
+       return this.resourceMap.entrySet().stream().filter(t -> t.getValue().getType() == type)
+                .map(t -> t.getKey()).collect(Collectors.toSet());
+    }
+
     public Set<Long> getIdsByRoleIds(Set<Long> ids) {
         return ids.stream().map(t -> roleResourceMap.get(t))
                 .filter(t -> Objects.nonNull(t)).flatMap(t -> t.stream()).collect(Collectors.toSet());
