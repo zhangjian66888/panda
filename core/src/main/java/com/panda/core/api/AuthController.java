@@ -12,7 +12,6 @@ import com.panda.core.handler.RoleHandler;
 import com.panda.core.handler.UserHandler;
 import com.panda.core.security.SecurityUser;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -40,9 +39,9 @@ public class AuthController extends ApiBaseController implements AuthApi {
 
     @Override
     public ResultDto<AuthUser> userByToken(
-            @RequestHeader("appCode") Long appCode,
-            @RequestHeader("secret") String secret,
-            @RequestHeader("profile") String profile,
+            @RequestParam("appCode") Long appCode,
+            @RequestParam("secret") String secret,
+            @RequestParam("profile") String profile,
             @RequestParam("token") String token) {
         verifyApp(appCode, secret, profile);
         SecurityUser securityUser = userHandler.verifyToken(token, appCode, profiles(profile));
@@ -61,9 +60,9 @@ public class AuthController extends ApiBaseController implements AuthApi {
 
     @Override
     public ResultDto<List<AuthResource>> resources(
-            @RequestHeader("appCode") Long appCode,
-            @RequestHeader("secret") String secret,
-            @RequestHeader("profile") String profile) {
+            @RequestParam("appCode") Long appCode,
+            @RequestParam("secret") String secret,
+            @RequestParam("profile") String profile) {
         verifyApp(appCode, secret, profile);
 
         List<PandaPermissionDto> permissions = permissionHandler.resources(appCode);
@@ -89,9 +88,9 @@ public class AuthController extends ApiBaseController implements AuthApi {
 
     @Override
     public ResultDto<Map<Long, Set<Long>>> roles(
-            @RequestHeader("appCode") Long appCode,
-            @RequestHeader("secret") String secret,
-            @RequestHeader("profile") String profile) {
+            @RequestParam("appCode") Long appCode,
+            @RequestParam("secret") String secret,
+            @RequestParam("profile") String profile) {
         verifyApp(appCode, secret, profile);
 
         return ResultDto.SUCCESS().setData(roleHandler.rolePermissions(appCode, profiles(profile)));
