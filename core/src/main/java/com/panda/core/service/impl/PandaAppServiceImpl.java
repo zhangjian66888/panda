@@ -181,4 +181,16 @@ public class PandaAppServiceImpl extends BaseServiceImpl<PandaAppMapper, PandaAp
     public PandaAppOwnerDto findByAppCodeOwnerId(Long appCode, Long ownerId) {
         return iPandaAppOwnerService.findOne(PandaAppOwnerDto.builder().appCode(appCode).ownerId(ownerId).build());
     }
+
+    @Override
+    public List<PandaAppDto> listByCodes(List<Long> codes) {
+        PandaApp query = new PandaApp();
+        query.setDelState(DelState.NO.getId());
+        QueryWrapper<PandaApp> queryWrapper = new QueryWrapper<>(query);
+        queryWrapper.in("app_code", codes);
+        List<PandaApp> list = list(queryWrapper);
+        return Optional.ofNullable(list).orElse(Lists.newArrayList())
+                .stream().map(t -> BeanUtil.transBean(t, PandaAppDto.class))
+                .collect(Collectors.toList());
+    }
 }

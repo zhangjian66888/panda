@@ -64,6 +64,8 @@ public class BaseServiceImpl<M extends BaseMapper<E>, E extends BaseEntity, D ex
             } else {
                 sPage.setDesc(search.getSortField());
             }
+        } else {
+            sPage.setDesc("id");
         }
         QueryWrapper<E> queryWrapper = new QueryWrapper<>(query);
         queryWrapper.nonEmptyOfEntity();

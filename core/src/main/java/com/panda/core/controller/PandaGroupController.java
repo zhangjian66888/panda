@@ -9,11 +9,9 @@ import com.panda.core.consts.CoreConst;
 import com.panda.core.dto.*;
 import com.panda.core.dto.search.PandaGroupSo;
 import com.panda.core.entity.PandaGroup;
-import com.panda.core.service.IPandaBusinessLineService;
-import com.panda.core.service.IPandaGroupService;
-import com.panda.core.service.IPandaRoleService;
-import com.panda.core.service.IPandaUserService;
+import com.panda.core.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -48,6 +46,9 @@ public class PandaGroupController extends BaseController<PandaGroup, PandaGroupD
     @Autowired
     private IPandaUserService iPandaUserService;
 
+    @Autowired
+    private IPandaAppService iPandaAppService;
+
     @Override
     protected List<PandaGroupDto> decorateList(List<PandaGroupDto> list) {
         List<SelectItemDto> lines = iPandaBusinessLineService.selectItem(false);
@@ -65,15 +66,32 @@ public class PandaGroupController extends BaseController<PandaGroup, PandaGroupD
             return StatusDto.SUCCESS();
         }
         List<Long> ids = list.stream().map(t -> t.getRoleId()).collect(Collectors.toList());
-        Map<Long, PandaRoleDto> map = Optional.ofNullable(iPandaRoleService.findListByIds(ids))
-                .orElse(Lists.newArrayList())
-                .stream().collect(Collectors.toMap(t -> t.getId(), t -> t));
+        List<PandaRoleDto> roles = iPandaRoleService.findListByIds(ids);
+        if (Objects.isNull(roles) || roles.isEmpty()) {
+            return StatusDto.SUCCESS();
+        }
+        List<Long> appCodes = roles.stream().map(t -> t.getAppCode()).collect(Collectors.toList());
+        List<PandaAppDto> apps = iPandaAppService.listByCodes(appCodes);
+        if (Objects.isNull(apps) || apps.isEmpty()) {
+            return StatusDto.SUCCESS();
+        }
+
+        Map<Long, PandaRoleDto> map = roles.stream().collect(Collectors.toMap(t -> t.getId(), t -> t));
+        Map<Long, PandaAppDto> appMap = apps.stream().collect(Collectors.toMap(t -> t.getAppCode(), t -> t));
+
         List<SelectedTagDto> tags = list.stream().map(t -> {
             SelectedTagDto tagDto = new SelectedTagDto();
             tagDto.setValue(t.getRoleId());
-            Optional.ofNullable(map.get(t.getRoleId())).ifPresent(st -> tagDto.setLabel(st.getRoleName()));
+            PandaRoleDto roleDto = map.get(t.getRoleId());
+            if (Objects.isNull(roleDto)) {
+                return tagDto;
+            }
+            String roleName = Optional.ofNullable(roleDto).map(r -> r.getRoleName()).orElse(String.valueOf(t.getRoleId()));
+            String appName = Optional.ofNullable(appMap.get(roleDto.getAppCode())).map(a -> a.getAppName())
+                    .orElse(String.valueOf(roleDto.getAppCode()));
+            tagDto.setLabel(roleName.concat("(").concat(appName).concat(")"));
             return tagDto;
-        }).collect(Collectors.toList());
+        }).filter(t -> StringUtils.hasLength(t.getLabel())).collect(Collectors.toList());
         return StatusDto.SUCCESS().setData(tags);
     }
 
