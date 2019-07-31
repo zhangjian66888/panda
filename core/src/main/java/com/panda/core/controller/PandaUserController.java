@@ -132,5 +132,12 @@ public class PandaUserController extends BaseController<PandaUser, PandaUserDto,
         return StatusDto.SUCCESS();
     }
 
+    @PostMapping("/reset/passwd/{id}")
+    @ResponseBody
+    public StatusDto resetPasswd(@PathVariable(value = "id") Long id) {
+        iPandaUserService.resetPasswd(id);
+        return StatusDto.SUCCESS();
+    }
+
 
 }

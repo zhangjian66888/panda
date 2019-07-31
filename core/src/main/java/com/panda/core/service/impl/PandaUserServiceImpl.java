@@ -5,7 +5,8 @@ import com.google.common.collect.Lists;
 import com.panda.common.enums.DelState;
 import com.panda.common.exception.PandaException;
 import com.panda.common.util.BeanUtil;
-import com.panda.common.util.MD5Util;
+import com.panda.common.util.PasswordUtil;
+import com.panda.core.config.ConfigProperties;
 import com.panda.core.dto.PandaUserDto;
 import com.panda.core.dto.PandaUserRoleDto;
 import com.panda.core.dto.search.PandaUserSo;
@@ -42,9 +43,12 @@ public class PandaUserServiceImpl
     @Autowired
     private PandaUserMapper pandaUserMapper;
 
+    @Autowired
+    private ConfigProperties configProperties;
+
     @Override
     public boolean save(PandaUser entity) {
-        entity.setPassword(MD5Util.getSaltMd5AndSha(entity.getPassword()));
+        entity.setPassword(PasswordUtil.encode(entity.getPassword()));
         return super.save(entity);
     }
 
@@ -120,5 +124,14 @@ public class PandaUserServiceImpl
         return Optional.ofNullable(pandaUserMapper.vagueLike(key))
                 .orElse(Lists.newArrayList()).stream().map(t -> BeanUtil.transBean(t, PandaUserDto.class))
                 .collect(Collectors.toList());
+    }
+
+    @Override
+    public int resetPasswd(Long id) {
+        LocalDateTime now = LocalDateTime.now();
+        PandaUser entity = PandaUser.builder().password(PasswordUtil.encode(configProperties.getDefaultPasswd())).build();
+        entity.setId(id);
+        entity.setUpdateTime(now);
+        return pandaUserMapper.updateById(entity);
     }
 }

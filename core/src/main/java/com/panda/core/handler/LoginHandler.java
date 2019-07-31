@@ -1,7 +1,7 @@
 package com.panda.core.handler;
 
 import com.panda.common.exception.PandaException;
-import com.panda.common.util.MD5Util;
+import com.panda.common.util.PasswordUtil;
 import com.panda.common.util.TokenUtil;
 import com.panda.core.consts.CoreConst;
 import com.panda.core.dto.LoginDto;
@@ -45,7 +45,7 @@ public class LoginHandler {
         if (Objects.isNull(pandaUserDto)) {
             throw new PandaException(errorMsg);
         }
-        if (!MD5Util.saltverifyMd5AndSha(dto.getPassword(), pandaUserDto.getPassword())) {
+        if (!PasswordUtil.matches(dto.getPassword(), pandaUserDto.getPassword())) {
             throw new PandaException(errorMsg);
         }
         PandaTokenDto old = iPandaTokenService.validToken(pandaUserDto.getId());

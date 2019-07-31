@@ -6,8 +6,6 @@ import lombok.NoArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
-import java.util.List;
-
 /**
  * com.panda.core.config.VariableConfig
  * <p>
@@ -23,4 +21,7 @@ public class ConfigProperties {
 
     @Value("${app.code}")
     private Long appCode;
+
+    @Value("${default.passwd}")
+    private String defaultPasswd;
 }
