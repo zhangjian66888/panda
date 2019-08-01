@@ -7,17 +7,9 @@ package com.panda.common.exception;
  *
  * @author zhanglijian.
  */
-public class AuthException extends PandaException {
+public class AuthException extends PandaFilterException {
 
-    public AuthException(Exception e) {
-        super(e);
-    }
-
-    public AuthException(String msg) {
-        super(msg);
-    }
-
-    public AuthException(String msg, Exception e) {
-        super(msg, e);
+    public AuthException(int status, String msg) {
+        super(status, msg);
     }
 }

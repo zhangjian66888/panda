@@ -12,9 +12,11 @@ import com.panda.core.handler.RoleHandler;
 import com.panda.core.handler.UserHandler;
 import com.panda.core.security.SecurityUser;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.servlet.http.HttpServletResponse;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -39,14 +41,13 @@ public class AuthController extends ApiBaseController implements AuthApi {
 
     @Override
     public ResultDto<AuthUser> userByToken(
-            @RequestParam("appCode") Long appCode,
-            @RequestParam("secret") String secret,
-            @RequestParam("profile") String profile,
+            @RequestHeader("appCode") Long appCode,
+            @RequestHeader("secret") String secret,
+            @RequestHeader("profile") String profile,
             @RequestParam("token") String token) {
-        verifyApp(appCode, secret, profile);
         SecurityUser securityUser = userHandler.verifyToken(token, appCode, profiles(profile));
         if (Objects.isNull(securityUser)) {
-            throw new AuthException("用户token认证失败");
+            throw new AuthException(HttpServletResponse.SC_UNAUTHORIZED, "用户token认证失败");
         }
         AuthUser authUser = AuthUser.builder()
                 .userId(securityUser.getUserId())
@@ -60,10 +61,9 @@ public class AuthController extends ApiBaseController implements AuthApi {
 
     @Override
     public ResultDto<List<AuthResource>> resources(
-            @RequestParam("appCode") Long appCode,
-            @RequestParam("secret") String secret,
-            @RequestParam("profile") String profile) {
-        verifyApp(appCode, secret, profile);
+            @RequestHeader("appCode") Long appCode,
+            @RequestHeader("secret") String secret,
+            @RequestHeader("profile") String profile) {
 
         List<PandaPermissionDto> permissions = permissionHandler.resources(appCode);
         List<AuthResource> resources = Optional.ofNullable(permissions)
@@ -88,10 +88,9 @@ public class AuthController extends ApiBaseController implements AuthApi {
 
     @Override
     public ResultDto<Map<Long, Set<Long>>> roles(
-            @RequestParam("appCode") Long appCode,
-            @RequestParam("secret") String secret,
-            @RequestParam("profile") String profile) {
-        verifyApp(appCode, secret, profile);
+            @RequestHeader("appCode") Long appCode,
+            @RequestHeader("secret") String secret,
+            @RequestHeader("profile") String profile) {
 
         return ResultDto.SUCCESS().setData(roleHandler.rolePermissions(appCode, profiles(profile)));
     }
