@@ -1,4 +1,4 @@
-package com.panda.core.api;
+package com.panda.core.open.api;
 
 import com.google.common.collect.Lists;
 import com.panda.api.dto.AuthResource;

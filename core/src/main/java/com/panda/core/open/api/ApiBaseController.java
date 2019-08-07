@@ -1,4 +1,4 @@
-package com.panda.core.api;
+package com.panda.core.open.api;
 
 /**
  * com.panda.core.api.ApiBaseController

@@ -105,4 +105,20 @@ public class UserHandler {
 
     }
 
+    public SecurityUser frontToken(String token) {
+        PandaTokenDto tokenDto = iPandaTokenService.validToken(token);
+        if (Objects.isNull(tokenDto)) {
+            throw new LoginException(HttpServletResponse.SC_UNAUTHORIZED, "token expire");
+        }
+        PandaUserDto userDto = iPandaUserService.findById(tokenDto.getUserId());
+        return SecurityUser.builder()
+                .userId(userDto.getId())
+                .username(userDto.getUsername())
+                .mobile(userDto.getMobile())
+                .email(userDto.getEmail())
+                .zhName(userDto.getZhName())
+                .build();
+
+    }
+
 }

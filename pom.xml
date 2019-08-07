@@ -39,12 +39,12 @@
             <dependency>
                 <groupId>com.panda</groupId>
                 <artifactId>panda-common</artifactId>
-                <version>${version}</version>
+                <version>${project.version}</version>
             </dependency>
             <dependency>
                 <groupId>com.panda</groupId>
                 <artifactId>panda-core</artifactId>
-                <version>${version}</version>
+                <version>${project.version}</version>
             </dependency>
             <dependency>
                 <groupId>com.panda</groupId>
@@ -54,19 +54,19 @@
             <dependency>
                 <groupId>com.panda</groupId>
                 <artifactId>panda-api</artifactId>
-                <version>${version}</version>
+                <version>${project.version}</version>
             </dependency>
 
             <dependency>
                 <groupId>com.panda</groupId>
                 <artifactId>panda-client</artifactId>
-                <version>${version}</version>
+                <version>${project.version}</version>
             </dependency>
 
             <dependency>
                 <groupId>com.panda</groupId>
                 <artifactId>panda-client-v1</artifactId>
-                <version>${version}</version>
+                <version>${project.version}</version>
             </dependency>
            <!-- <dependency>
                 <groupId>org.springframework.boot</groupId>

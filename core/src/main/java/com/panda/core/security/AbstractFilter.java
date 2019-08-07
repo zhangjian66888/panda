@@ -28,6 +28,7 @@ public abstract class AbstractFilter implements Filter {
 
     protected boolean ignoring(HttpServletRequest request) {
         if (request.getRequestURI().startsWith(ApiConst.API_REQUEST_PREFIX)
+                || request.getRequestURI().startsWith(CoreConst.FRONT_REQUEST_PREFIX)
                 || request.getRequestURI().equalsIgnoreCase(CoreConst.MAIN_REQUEST_PREFIX.concat("login"))
                 || aclProperties.checkACL(request.getRequestURI())) {
             return true;
