@@ -7,6 +7,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 
 /**
@@ -33,8 +34,17 @@ public abstract class BaseSo {
 
     protected List<InPair> ins;
 
+
     public List<InPair> getIns() {
-        return Optional.ofNullable(ins).orElse(Lists.newArrayList());
+        this.ins = Optional.ofNullable(ins).orElse(Lists.newArrayList());
+        return ins;
+    }
+
+    public BaseSo in(String column, List list) {
+        if (Objects.nonNull(list) && !list.isEmpty()) {
+            getIns().add(InPair.builder().column(column).values(list).build());
+        }
+        return this;
     }
 
 }

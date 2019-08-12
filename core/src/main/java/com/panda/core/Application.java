@@ -6,7 +6,6 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.context.annotation.Bean;
-import org.springframework.core.annotation.Order;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 import org.springframework.web.filter.CorsFilter;
@@ -49,7 +48,7 @@ public class Application {
         config.addAllowedMethod("PATCH");
         source.registerCorsConfiguration("/**", config);
         FilterRegistrationBean filterRegistrationBean = new FilterRegistrationBean<>(new CorsFilter(source));
-        filterRegistrationBean.setOrder(CoreConst.FILTER_ORDER - 1);
+        filterRegistrationBean.setOrder(CoreConst.FILTER_ORDER - 100);
         return filterRegistrationBean;
     }
 }

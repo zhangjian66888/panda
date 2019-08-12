@@ -68,6 +68,11 @@ public class BaseServiceImpl<M extends BaseMapper<E>, E extends BaseEntity, D ex
             sPage.setDesc("id");
         }
         QueryWrapper<E> queryWrapper = new QueryWrapper<>(query);
+        if (Objects.nonNull(search.getIns()) && !search.getIns().isEmpty()) {
+            for (InPair inPair : search.getIns()) {
+                queryWrapper.in(inPair.getColumn(), inPair.getValues());
+            }
+        }
         queryWrapper.nonEmptyOfEntity();
         IPage<E> iPage = super.page(sPage, queryWrapper);
 
@@ -196,7 +201,7 @@ public class BaseServiceImpl<M extends BaseMapper<E>, E extends BaseEntity, D ex
     }
 
     @Override
-    public List<SelectItemDto> selectItem(boolean all, S s) {
+    public List<SelectItemDto> selectItem(boolean all, BaseSo s) {
 
         E query = null;
         if (Objects.nonNull(s)) {

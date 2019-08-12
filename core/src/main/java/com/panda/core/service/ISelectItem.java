@@ -18,7 +18,7 @@ public interface ISelectItem<S extends BaseSo> {
 
     List<SelectItemDto> selectItem(boolean all, List<Long> ids);
 
-    List<SelectItemDto> selectItem(boolean all, S s);
+    List<SelectItemDto> selectItem(boolean all, BaseSo s);
 
     String[] selectItemField();
 }
