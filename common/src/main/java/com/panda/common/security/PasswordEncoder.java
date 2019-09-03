@@ -13,7 +13,7 @@ public interface PasswordEncoder {
      * Encode the raw password. Generally, a good encoding algorithm applies a SHA-1 or
      * greater hash combined with an 8-byte or greater randomly generated salt.
      */
-    String encode(CharSequence rawPassword);
+    String encode(String rawPassword);
 
     /**
      * Verify the encoded password obtained from storage matches the submitted raw
@@ -25,7 +25,7 @@ public interface PasswordEncoder {
      * @return true if the raw password, after encoding, matches the encoded password from
      * storage
      */
-    boolean matches(CharSequence rawPassword, String encodedPassword);
+    boolean matches(String rawPassword, String encodedPassword);
 
 }
 

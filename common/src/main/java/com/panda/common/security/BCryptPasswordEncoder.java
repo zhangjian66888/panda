@@ -47,7 +47,7 @@ public class BCryptPasswordEncoder implements PasswordEncoder {
     }
 
     @Override
-    public String encode(CharSequence rawPassword) {
+    public String encode(String rawPassword) {
         String salt;
         if (strength > 0) {
             if (random != null) {
@@ -62,7 +62,7 @@ public class BCryptPasswordEncoder implements PasswordEncoder {
     }
 
     @Override
-    public boolean matches(CharSequence rawPassword, String encodedPassword) {
+    public boolean matches(String rawPassword, String encodedPassword) {
         if (encodedPassword == null || encodedPassword.length() == 0) {
             logger.warn("Empty encoded password");
             return false;

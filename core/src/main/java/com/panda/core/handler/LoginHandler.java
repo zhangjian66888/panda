@@ -1,7 +1,7 @@
 package com.panda.core.handler;
 
 import com.panda.common.exception.PandaException;
-import com.panda.common.util.PasswordUtil;
+import com.panda.common.security.PasswordEncoder;
 import com.panda.common.util.TokenUtil;
 import com.panda.core.consts.CoreConst;
 import com.panda.core.dto.LoginDto;
@@ -33,6 +33,9 @@ public class LoginHandler {
     @Autowired
     private IPandaTokenService iPandaTokenService;
 
+    @Autowired
+    private PasswordEncoder passwordEncoder;
+
     public LoginSuccessDto login(LoginDto dto) {
         String errorMsg = "账号或密码错误";
         PandaUserDto pandaUserDto = iPandaUserService.findOne(PandaUserDto.builder().username(dto.getUsername()).build());
@@ -45,7 +48,7 @@ public class LoginHandler {
         if (Objects.isNull(pandaUserDto)) {
             throw new PandaException(errorMsg);
         }
-        if (!PasswordUtil.matches(dto.getPassword(), pandaUserDto.getPassword())) {
+        if (!passwordEncoder.matches(dto.getPassword(), pandaUserDto.getPassword())) {
             throw new PandaException(errorMsg);
         }
         PandaTokenDto old = iPandaTokenService.validToken(pandaUserDto.getId());

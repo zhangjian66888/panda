@@ -139,5 +139,11 @@ public class PandaUserController extends BaseController<PandaUser, PandaUserDto,
         return StatusDto.SUCCESS();
     }
 
+    @PostMapping("/update/passwd")
+    @ResponseBody
+    public StatusDto updatePasswd(@RequestBody PasswdChangeDto dto) {
+        iPandaUserService.updatePasswd(dto.getOldPasswd(), dto.getNewPasswd());
+        return StatusDto.SUCCESS();
+    }
 
 }

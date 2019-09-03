@@ -29,4 +29,6 @@ public interface IPandaUserService extends IBaseService<PandaUser, PandaUserDto,
     List<PandaUserDto> vagueFullQuery(String key);
 
     int resetPasswd(Long id);
+
+    int updatePasswd(String oldPasswd, String newPasswd);
 }
