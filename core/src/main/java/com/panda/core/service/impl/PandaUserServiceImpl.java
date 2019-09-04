@@ -14,8 +14,6 @@ import com.panda.core.entity.PandaUser;
 import com.panda.core.entity.PandaUserRole;
 import com.panda.core.mapper.PandaUserMapper;
 import com.panda.core.mapper.PandaUserRoleMapper;
-import com.panda.core.security.SecurityUser;
-import com.panda.core.security.SecurityUserContext;
 import com.panda.core.service.IPandaUserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -137,26 +135,6 @@ public class PandaUserServiceImpl
         LocalDateTime now = LocalDateTime.now();
         PandaUser entity = PandaUser.builder().password(passwordEncoder.encode(configProperties.getDefaultPasswd())).build();
         entity.setId(id);
-        entity.setUpdateTime(now);
-        return pandaUserMapper.updateById(entity);
-    }
-
-    @Override
-    public int updatePasswd(String oldPasswd, String newPasswd) {
-        SecurityUser user = SecurityUserContext.getContext();
-        if (user == null) {
-            throw new PandaException("请登录后重试");
-        }
-        PandaUser pandaUser = pandaUserMapper.selectById(user.getUserId());
-        if (pandaUser == null) {
-            throw new PandaException("帐号不存在");
-        }
-        if (!passwordEncoder.matches(oldPasswd, pandaUser.getPassword())) {
-            throw new PandaException("旧密码输入错误");
-        }
-        LocalDateTime now = LocalDateTime.now();
-        PandaUser entity = PandaUser.builder().password(passwordEncoder.encode(newPasswd)).build();
-        entity.setId(pandaUser.getId());
         entity.setUpdateTime(now);
         return pandaUserMapper.updateById(entity);
     }

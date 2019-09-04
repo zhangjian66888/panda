@@ -30,5 +30,4 @@ public interface IPandaUserService extends IBaseService<PandaUser, PandaUserDto,
 
     int resetPasswd(Long id);
 
-    int updatePasswd(String oldPasswd, String newPasswd);
 }
