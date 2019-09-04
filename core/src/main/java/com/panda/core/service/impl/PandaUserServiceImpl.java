@@ -151,7 +151,7 @@ public class PandaUserServiceImpl
         if (pandaUser == null) {
             throw new PandaException("帐号不存在");
         }
-        if (passwordEncoder.matches(oldPasswd, pandaUser.getPassword())) {
+        if (!passwordEncoder.matches(oldPasswd, pandaUser.getPassword())) {
             throw new PandaException("旧密码输入错误");
         }
         LocalDateTime now = LocalDateTime.now();
