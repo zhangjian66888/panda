@@ -121,4 +121,8 @@ public class UserHandler {
 
     }
 
+    public int updatePasswd(String oldPasswd, String newPasswd) {
+        return iPandaUserService.updatePasswd(oldPasswd, newPasswd);
+    }
+
 }

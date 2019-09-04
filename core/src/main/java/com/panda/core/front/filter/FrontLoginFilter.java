@@ -6,7 +6,6 @@ import com.panda.common.exception.LoginException;
 import com.panda.common.exception.PandaException;
 import com.panda.common.exception.PandaFilterException;
 import com.panda.core.consts.CoreConst;
-import com.panda.core.filter.BaseFilter;
 import com.panda.core.handler.UserHandler;
 import com.panda.core.security.SecurityUser;
 import com.panda.core.security.SecurityUserContext;
@@ -48,9 +47,8 @@ public class FrontLoginFilter extends BaseFilter {
         if (request.getRequestURI().startsWith(CoreConst.FRONT_REQUEST_PREFIX)) {
             String token = request.getHeader("Authorization");
             if (!StringUtils.hasLength(token)) {
-                throw new LoginException(HttpServletResponse.SC_UNAUTHORIZED, "token invalid");
+                throw new LoginException(HttpServletResponse.SC_UNAUTHORIZED, "token invalid front");
             }
-
             SecurityUser securityUser = null;
             try {
                 securityUser = userCache.get(token, ()->userHandler.frontToken(token));
