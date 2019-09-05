@@ -46,9 +46,15 @@ public class FrontController {
 
     @PostMapping("/change/passwd")
     @ResponseBody
-    public Mono updatePasswd(@RequestBody PasswdChangeDto dto) {
+    public Mono<StatusDto> updatePasswd(@RequestBody PasswdChangeDto dto) {
         userHandler.updatePasswd(dto.getOldPasswd(), dto.getNewPasswd());
         return Mono.just(StatusDto.SUCCESS());
+    }
+
+    @GetMapping("/user/resource")
+    @ResponseBody
+    public Mono<StatusDto> userResource() {
+        return Mono.just(StatusDto.SUCCESS().setData(userHandler.userRoles()));
     }
 
 }

@@ -1,15 +1,19 @@
 package com.panda.core.handler;
 
+import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
 import com.panda.common.enums.AppOwnerType;
 import com.panda.common.exception.LoginException;
 import com.panda.common.exception.PandaException;
 import com.panda.common.security.PasswordEncoder;
 import com.panda.core.config.ConfigProperties;
+import com.panda.core.dto.PandaAppDto;
 import com.panda.core.dto.PandaAppOwnerDto;
 import com.panda.core.dto.PandaBusinessLineDto;
+import com.panda.core.dto.PandaEnvDto;
 import com.panda.core.dto.PandaGroupDto;
 import com.panda.core.dto.PandaGroupUserDto;
+import com.panda.core.dto.PandaRoleDto;
 import com.panda.core.dto.PandaTokenDto;
 import com.panda.core.dto.PandaUserDto;
 import com.panda.core.entity.PandaUser;
@@ -29,6 +33,7 @@ import org.springframework.stereotype.Component;
 import javax.servlet.http.HttpServletResponse;
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.Set;
@@ -124,6 +129,61 @@ public class UserHandler {
 
     }
 
+    public List<PandaRoleDto> userRoles() {
+        SecurityUser user = SecurityUserContext.getContext();
+        if (user == null) {
+            throw new PandaException("请登录后重试");
+        }
+        PandaUserDto userDto = iPandaUserService.findById(user.getUserId());
+        if (userDto == null) {
+            throw new PandaException("帐号不存在");
+        }
+
+        List<PandaGroupUserDto> userGroups = iPandaGroupService.groupsByUserId(userDto.getId());
+        Set<Long> groupIds = Sets.newHashSet(userDto.getGroupId());
+        Optional.ofNullable(userGroups).filter(t -> !t.isEmpty())
+                .ifPresent(t -> groupIds.addAll(t.stream().map(st -> st.getGroupId()).collect(Collectors.toList())));
+
+        List<Long> userRoleIds = iPandaUserService.rolesIdsByUserId(userDto.getId());
+        List<Long> groupRoleIds = iPandaGroupService.roleIdsByGroupIds(groupIds);
+        userRoleIds.addAll(groupRoleIds);
+        Set<Long> roleIds = Sets.newHashSet();
+        roleIds.addAll(userRoleIds);
+        roleIds.addAll(groupRoleIds);
+        List<PandaRoleDto> roleDtos = iPandaRoleService.findListByIds(roleIds);
+        Set<Long> lines = Sets.newHashSet();
+        Set<Long> envIds = Sets.newHashSet();
+        Set<Long> appIds = Sets.newHashSet();
+        for (PandaRoleDto roleDto : roleDtos) {
+            lines.add(roleDto.getBusinessLineId());
+            envIds.add(roleDto.getEnvCode());
+            appIds.add(roleDto.getAppCode());
+        }
+        Map<Long, PandaBusinessLineDto> lineMap = Optional.ofNullable(iPandaBusinessLineService.findListByIds(lines))
+                .orElse(Lists.newArrayList())
+                .stream().collect(Collectors.toMap(t -> t.getId(), t -> t));
+
+        Map<Long, PandaEnvDto> envMap = Optional.ofNullable(iPandaEnvService.findListByIds(lines))
+                .orElse(Lists.newArrayList())
+                .stream().collect(Collectors.toMap(t -> t.getEnvCode(), t -> t));
+
+        Map<Long, PandaAppDto> appMap = Optional.ofNullable(iPandaAppService.findListByIds(lines))
+                .orElse(Lists.newArrayList())
+                .stream().collect(Collectors.toMap(t -> t.getAppCode(), t -> t));
+
+        for (PandaRoleDto roleDto : roleDtos) {
+            roleDto.setBusinessLineName(Optional.ofNullable(lineMap.get(roleDto.getBusinessLineId()))
+                    .map(t -> t.getBusinessLineName()).orElse("" + roleDto.getBusinessLineId()));
+
+            roleDto.setEnvName(Optional.ofNullable(envMap.get(roleDto.getEnvCode()))
+                    .map(t -> t.getEnvName()).orElse("" + roleDto.getEnvCode()));
+
+            roleDto.setAppName(Optional.ofNullable(appMap.get(roleDto.getAppCode())).map(t -> t.getAppName())
+                    .orElse("" + roleDto.getAppCode()));
+        }
+        return roleDtos;
+    }
+
     public SecurityUser frontToken(String token) {
         PandaTokenDto tokenDto = iPandaTokenService.validToken(token);
         if (Objects.isNull(tokenDto)) {
@@ -152,8 +212,8 @@ public class UserHandler {
         pandaUser.setPassword(null);
         PandaBusinessLineDto lineDto = iPandaBusinessLineService.findById(pandaUser.getBusinessLineId());
         PandaGroupDto groupDto = iPandaGroupService.findById(pandaUser.getGroupId());
-        pandaUser.setBusinessLineName(Optional.ofNullable(lineDto).map(t->t.getBusinessLineName()).orElse("未知"));
-        pandaUser.setGroupName(Optional.ofNullable(groupDto).map(t->t.getGroupName()).orElse("未知"));
+        pandaUser.setBusinessLineName(Optional.ofNullable(lineDto).map(t -> t.getBusinessLineName()).orElse("未知"));
+        pandaUser.setGroupName(Optional.ofNullable(groupDto).map(t -> t.getGroupName()).orElse("未知"));
         return pandaUser;
     }
 
