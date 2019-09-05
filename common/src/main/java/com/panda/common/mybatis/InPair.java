@@ -2,6 +2,7 @@ package com.panda.common.mybatis;
 
 import lombok.*;
 
+import java.util.Collection;
 import java.util.List;
 
 /**
@@ -19,5 +20,5 @@ import java.util.List;
 public class InPair {
     private String column;
 
-    private List values;
+    private Collection values;
 }

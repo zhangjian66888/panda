@@ -153,6 +153,11 @@ public class BaseServiceImpl<M extends BaseMapper<E>, E extends BaseEntity, D ex
         if (Objects.nonNull(select) && select.length > 0) {
             queryWrapper.select(select);
         }
+        if (Objects.nonNull(dto.getIns()) && !dto.getIns().isEmpty()) {
+            for (InPair inPair : dto.getIns()) {
+                queryWrapper.in(inPair.getColumn(), inPair.getValues());
+            }
+        }
         queryWrapper.nonEmptyOfEntity();
         List<E> list = super.list(queryWrapper);
         return list;

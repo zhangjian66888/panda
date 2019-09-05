@@ -152,24 +152,24 @@ public class UserHandler {
         roleIds.addAll(groupRoleIds);
         List<PandaRoleDto> roleDtos = iPandaRoleService.findListByIds(roleIds);
         Set<Long> lines = Sets.newHashSet();
-        Set<Long> envIds = Sets.newHashSet();
-        Set<Long> appIds = Sets.newHashSet();
+        Set<Long> envCodes = Sets.newHashSet();
+        Set<Long> appCodes = Sets.newHashSet();
         for (PandaRoleDto roleDto : roleDtos) {
             lines.add(roleDto.getBusinessLineId());
-            envIds.add(roleDto.getEnvCode());
-            appIds.add(roleDto.getAppCode());
+            envCodes.add(roleDto.getEnvCode());
+            appCodes.add(roleDto.getAppCode());
         }
         Map<Long, PandaBusinessLineDto> lineMap = Optional.ofNullable(iPandaBusinessLineService.findListByIds(lines))
                 .orElse(Lists.newArrayList())
                 .stream().collect(Collectors.toMap(t -> t.getId(), t -> t));
 
-        Map<Long, PandaEnvDto> envMap = Optional.ofNullable(iPandaEnvService.findListByIds(lines))
-                .orElse(Lists.newArrayList())
-                .stream().collect(Collectors.toMap(t -> t.getEnvCode(), t -> t));
+        Map<Long, PandaEnvDto> envMap = Optional.ofNullable(iPandaEnvService.find(new PandaEnvDto() {{
+            in("env_code", envCodes);
+        }})).orElse(Lists.newArrayList()).stream().collect(Collectors.toMap(t -> t.getEnvCode(), t -> t));
 
-        Map<Long, PandaAppDto> appMap = Optional.ofNullable(iPandaAppService.findListByIds(lines))
-                .orElse(Lists.newArrayList())
-                .stream().collect(Collectors.toMap(t -> t.getAppCode(), t -> t));
+        Map<Long, PandaAppDto> appMap = Optional.ofNullable(iPandaAppService.find(new PandaAppDto() {{
+            in("app_code", appCodes);
+        }})).orElse(Lists.newArrayList()).stream().collect(Collectors.toMap(t -> t.getAppCode(), t -> t));
 
         for (PandaRoleDto roleDto : roleDtos) {
             roleDto.setBusinessLineName(Optional.ofNullable(lineMap.get(roleDto.getBusinessLineId()))
