@@ -14,4 +14,5 @@ import com.panda.core.entity.PandaApply;
  */
 public interface IPandaApplyService extends IBaseService<PandaApply, PandaApplyDto, PandaApplySo> {
 
+    int cancelById(Long id);
 }

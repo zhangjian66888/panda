@@ -9,6 +9,7 @@ import com.panda.core.consts.CoreConst;
 import com.panda.core.dto.PandaApplyDto;
 import com.panda.core.dto.search.PandaApplySo;
 import com.panda.core.front.dto.search.FrontApplySo;
+import com.panda.core.handler.ApplyHandler;
 import com.panda.core.security.SecurityUser;
 import com.panda.core.security.SecurityUserContext;
 import com.panda.core.service.IPandaApplyService;
@@ -16,6 +17,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 import reactor.core.publisher.Mono;
 
@@ -36,11 +39,14 @@ public class FrontApplyController {
     @Autowired
     private IPandaApplyService iPandaApplyService;
 
+    @Autowired
+    private ApplyHandler applyHandler;
+
     @PostMapping("search")
     public Mono<ResultDto<PageDto<PandaApplyDto>>> search(@RequestBody FrontApplySo search) {
         return Mono.fromSupplier(() -> {
             SecurityUser uer = SecurityUserContext.getContext();
-            PandaApplySo so = new PandaApplySo(){{
+            PandaApplySo so = new PandaApplySo() {{
                 setApplicantId(uer.getUserId());
                 in("apply_type", search.getApplyTypes());
                 in("apply_state", search.getApplyState());
@@ -55,6 +61,24 @@ public class FrontApplyController {
                 }
             }
             return ResultDto.SUCCESS().setData(pageDto);
+        });
+    }
+
+    @PostMapping("/delete")
+    @ResponseBody
+    public Mono<ResultDto> delete(@RequestParam(value = "id") Long id) {
+        return Mono.fromSupplier(() -> {
+            applyHandler.deleteApply(id);
+            return ResultDto.SUCCESS();
+        });
+    }
+
+    @PostMapping("/cancel")
+    @ResponseBody
+    public Mono<ResultDto> cancel(@RequestParam(value = "id") Long id) {
+        return Mono.fromSupplier(() -> {
+            applyHandler.cancelApply(id);
+            return ResultDto.SUCCESS();
         });
     }
 }

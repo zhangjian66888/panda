@@ -1,8 +1,11 @@
 package com.panda.core.entity;
 
 import com.panda.common.entity.BaseEntity;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import lombok.NoArgsConstructor;
 import lombok.experimental.Accessors;
 
 /**
@@ -14,7 +17,9 @@ import lombok.experimental.Accessors;
  * @since 2019-09-05
  */
 @Data
-@EqualsAndHashCode(callSuper = true)
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
 @Accessors(chain = true)
 public class PandaApply extends BaseEntity {
 

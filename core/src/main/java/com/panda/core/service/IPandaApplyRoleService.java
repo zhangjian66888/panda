@@ -6,7 +6,7 @@ import com.panda.core.entity.PandaApplyRole;
 
 /**
  * <p>
- *  服务类
+ * 服务类
  * </p>
  *
  * @author zhanglijian
@@ -14,4 +14,7 @@ import com.panda.core.entity.PandaApplyRole;
  */
 public interface IPandaApplyRoleService extends IBaseService<PandaApplyRole, PandaApplyRoleDto, PandaApplyRoleSo> {
 
+    int deleteByApplyId(Long applyId);
+
+    int cancelByApplyId(Long applyId);
 }
