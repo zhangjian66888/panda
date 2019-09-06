@@ -4,7 +4,6 @@ import com.panda.common.dto.PageDto;
 import com.panda.common.dto.ResultDto;
 import com.panda.common.enums.ApplyState;
 import com.panda.common.enums.ApplyType;
-import com.panda.common.util.BeanUtil;
 import com.panda.common.util.SelectItemUtil;
 import com.panda.core.consts.CoreConst;
 import com.panda.core.dto.PandaApplyDto;
@@ -42,8 +41,12 @@ public class FrontApplyController {
     public Mono<ResultDto<PageDto<PandaRoleDto>>> search(@RequestBody FrontApplySo search) {
         return Mono.fromSupplier(() -> {
             SecurityUser uer = SecurityUserContext.getContext();
-            PandaApplySo so = BeanUtil.transBean(search, PandaApplySo.class);
-            so.setApplicantId(uer.getUserId());
+            PandaApplySo so = new PandaApplySo(){{
+                setApplicantId(uer.getUserId());
+                in("apply_type", search.getApplyTypes());
+                in("apply_state", search.getApplyState());
+            }};
+
             PageDto<PandaApplyDto> pageDto = iPandaApplyService.search(so);
             if (Objects.nonNull(pageDto)
                     && Objects.nonNull(pageDto.getRecords()) && !pageDto.getRecords().isEmpty()) {

@@ -6,6 +6,8 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.List;
+
 /**
  * com.panda.core.front.dto.search.FrontApplySo
  * <p>
@@ -20,7 +22,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class FrontApplySo extends BaseSo {
 
-    private Integer applyType;
+    private List<Integer> applyTypes;
 
-    private Integer applyState;
+    private List<Integer> applyState;
 }
