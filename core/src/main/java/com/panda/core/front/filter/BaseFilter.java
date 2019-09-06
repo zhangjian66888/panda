@@ -32,6 +32,7 @@ public abstract class BaseFilter implements Filter {
         if (request.getRequestURI().startsWith(CoreConst.MAIN_REQUEST_PREFIX)
                 || request.getRequestURI().startsWith(ApiConst.API_REQUEST_PREFIX)
                 || request.getRequestURI().equalsIgnoreCase(CoreConst.FRONT_REQUEST_PREFIX.concat("login"))) {
+            chain.doFilter(request, response);
             return;
         }
         try {

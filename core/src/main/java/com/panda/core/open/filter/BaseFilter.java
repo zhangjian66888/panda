@@ -30,6 +30,7 @@ public abstract class BaseFilter implements Filter {
         HttpServletResponse response = (HttpServletResponse) servletResponse;
         if (request.getRequestURI().startsWith(CoreConst.MAIN_REQUEST_PREFIX)
                 || request.getRequestURI().startsWith(CoreConst.FRONT_REQUEST_PREFIX)) {
+            chain.doFilter(request, response);
             return;
         }
         try {
