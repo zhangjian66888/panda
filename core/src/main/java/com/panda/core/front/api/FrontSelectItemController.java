@@ -2,7 +2,9 @@ package com.panda.core.front.api;
 
 import com.panda.common.dto.ResultDto;
 import com.panda.common.dto.SelectItemDto;
+import com.panda.common.dto.StatusDto;
 import com.panda.common.mybatis.InPair;
+import com.panda.common.util.SelectItemUtil;
 import com.panda.core.consts.CoreConst;
 import com.panda.core.dto.search.PandaAppSo;
 import com.panda.core.service.IPandaAppService;
@@ -40,6 +42,15 @@ public class FrontSelectItemController {
     @Autowired
     private IPandaEnvService iPandaEnvService;
 
+
+
+    @GetMapping("/static")
+    public StatusDto staticSelectItems(
+            @RequestParam("type") String type,
+            @RequestParam(value = "all", required = false, defaultValue = "false") Boolean all) {
+
+        return StatusDto.SUCCESS().setData(SelectItemUtil.selectItem(type, all));
+    }
 
     @GetMapping("/businessLine")
     public ResultDto<SelectItemDto> businessLine() {

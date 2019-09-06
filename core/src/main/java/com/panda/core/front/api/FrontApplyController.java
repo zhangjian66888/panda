@@ -7,7 +7,6 @@ import com.panda.common.enums.ApplyType;
 import com.panda.common.util.SelectItemUtil;
 import com.panda.core.consts.CoreConst;
 import com.panda.core.dto.PandaApplyDto;
-import com.panda.core.dto.PandaRoleDto;
 import com.panda.core.dto.search.PandaApplySo;
 import com.panda.core.front.dto.search.FrontApplySo;
 import com.panda.core.security.SecurityUser;
@@ -37,8 +36,8 @@ public class FrontApplyController {
     @Autowired
     private IPandaApplyService iPandaApplyService;
 
-    @PostMapping("list")
-    public Mono<ResultDto<PageDto<PandaRoleDto>>> search(@RequestBody FrontApplySo search) {
+    @PostMapping("search")
+    public Mono<ResultDto<PageDto<PandaApplyDto>>> search(@RequestBody FrontApplySo search) {
         return Mono.fromSupplier(() -> {
             SecurityUser uer = SecurityUserContext.getContext();
             PandaApplySo so = new PandaApplySo(){{
