@@ -20,7 +20,8 @@ public enum  ApplyState {
     DOING(10,"审批中"),
     PASS(20,"审批通过"),
     BACK(30,"退回"),
-    END(50,"审批通过");
+    CANCEL(40,"取消"),
+    PB(50,"部分通过");
 
     private int id;
     private String label;

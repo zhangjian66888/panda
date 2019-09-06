@@ -23,6 +23,10 @@ public class PandaApplyDto extends BaseDto {
     private Long applicantId;
 
     private Integer applyType;
+    private String applyTypeLabel;
 
     private Integer applyState;
+    private String applyStateLabel;
+
+
 }

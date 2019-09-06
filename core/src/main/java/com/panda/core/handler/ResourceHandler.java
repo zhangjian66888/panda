@@ -1,8 +1,10 @@
 package com.panda.core.handler;
 
 import com.alibaba.fastjson.JSON;
+import com.google.common.collect.Lists;
 import com.panda.common.enums.ApplyState;
 import com.panda.common.enums.ApplyType;
+import com.panda.common.exception.PandaException;
 import com.panda.core.dto.PandaApplyDto;
 import com.panda.core.dto.PandaApplyRoleDto;
 import com.panda.core.dto.PandaRoleDto;
@@ -42,6 +44,14 @@ public class ResourceHandler {
     public void apply(FrontApplyRoleDto applyRoleDto) {
         SecurityUser user = SecurityUserContext.getContext();
         List<Long> roleIds = applyRoleDto.getRoleIds();
+        PandaApplyDto check = iPandaApplyService.findOne(new PandaApplyDto() {{
+            setApplicantId(user.getUserId());
+            setApplyType(ApplyType.ROLE.getId());
+            in("apply_state", Lists.newArrayList(ApplyState.SUBMIT.getId(), ApplyState.DOING.getId()));
+        }});
+        if (Objects.nonNull(check)) {
+            throw new PandaException("已经有进行中申请");
+        }
         List<PandaRoleDto> roles = iPandaRoleService.findListByIds(roleIds);
         if (Objects.nonNull(roleIds) && !roleIds.isEmpty()) {
             Map<Long, List<Long>> map = roles.stream()
