@@ -19,5 +19,5 @@ public enum  DelState {
     YES(1, "删除");
 
     private int id;
-    private String name;
+    private String label;
 }

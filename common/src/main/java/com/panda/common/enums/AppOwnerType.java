@@ -19,5 +19,5 @@ public enum AppOwnerType {
     OPERATE(1, "运营"),
     ADMIN(10, "管理员");
     private int id;
-    private String value;
+    private String label;
 }

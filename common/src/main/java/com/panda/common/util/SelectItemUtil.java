@@ -40,7 +40,7 @@ public class SelectItemUtil {
             Object[] values = clazz.getEnumConstants();
             if (Objects.nonNull(values)) {
                 Method getId = clazz.getMethod("getId");
-                Method getValue = clazz.getMethod("getValue");
+                Method getValue = clazz.getMethod("getLabel");
                 for (Object value : values) {
                     SelectItemDto seleteItem = SelectItemDto.builder()
                             .id(Long.valueOf(getId.invoke(value).toString()))

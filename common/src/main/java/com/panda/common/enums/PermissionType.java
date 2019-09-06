@@ -24,6 +24,6 @@ public enum PermissionType {
     Beta功能(100, "Beta功能");
 
     private int id;
-    private String value;
+    private String label;
 
 }

@@ -5,24 +5,20 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 /**
- * Description
+ * com.panda.common.enums.ApplyType
  * <p>
- * DATE 2018/4/16.
+ * DATE 2019/9/6
  *
  * @author zhanglijian.
  */
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor
-public enum PermissionMethod {
+public enum  ApplyType {
 
-    ALL(0,"ALL"),
-    GET(1,"GET"),
-    POST(2,"POST"),
-    PUT(3,"PUT"),
-    DELETE(4,"DELETE");
+    DEFAULT(0,"未知"),
+    ROLE(1,"权限申请");
 
     private int id;
     private String label;
-
 }

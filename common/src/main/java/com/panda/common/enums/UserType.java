@@ -22,5 +22,5 @@ public enum UserType {
     ALL(2, "所有权限");
 
     private int id;
-    private String value;
+    private String label;
 }

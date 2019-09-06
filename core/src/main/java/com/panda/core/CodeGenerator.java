@@ -123,11 +123,13 @@ public class CodeGenerator {
         strategy.setNaming(NamingStrategy.underline_to_camel);
         strategy.setColumnNaming(NamingStrategy.underline_to_camel);
         strategy.setSuperEntityClass("com.panda.common.entity.BaseEntity");
+        strategy.setSuperServiceClass("com.panda.core.service.IBaseService");
+        strategy.setSuperServiceImplClass("com.panda.core.service.impl.BaseServiceImpl");
         strategy.setEntityLombokModel(true);
 //        strategy.setRestControllerStyle(false);
 //        strategy.setSuperControllerClass("com.panda.common.Controller.BaseController");
 //        strategy.setInclude(scanner("表名，多个英文逗号分割").split(","));
-        strategy.setInclude(("panda_app_owner").split(","));
+        strategy.setInclude(("panda_apply,panda_apply_role").split(","));
         strategy.setSuperEntityColumns("id");
         strategy.setControllerMappingHyphenStyle(true);
         strategy.setTablePrefix(pc.getModuleName() + "_");

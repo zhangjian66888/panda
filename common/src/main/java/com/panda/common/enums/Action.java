@@ -41,5 +41,5 @@ public enum Action {
     SHOW(22, "show");
 
     private int id;
-    private String value;
+    private String label;
 }

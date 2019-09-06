@@ -5,7 +5,6 @@ import com.panda.common.exception.AuthException;
 import com.panda.common.exception.PandaFilterException;
 import com.panda.core.consts.CoreConst;
 import com.panda.core.dto.PandaAppSecretDto;
-import com.panda.core.front.filter.BaseFilter;
 import com.panda.core.service.IPandaAppService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;

@@ -100,7 +100,9 @@ public class BaseServiceImpl<M extends BaseMapper<E>, E extends BaseEntity, D ex
         if (Objects.isNull(e.getId())) {
             e.setCreateTime(now);
         }
-        return saveOrUpdate(e);
+        boolean result = saveOrUpdate(e);
+        dto.setId(e.getId());
+        return result;
     }
 
     @Override

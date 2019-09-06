@@ -21,5 +21,5 @@ public enum  MenuType {
     SECOND_MENU(2, "二级");
 
     private int id;
-    private String value;
+    private String label;
 }
