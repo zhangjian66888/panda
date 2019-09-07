@@ -51,6 +51,7 @@ public class FrontApplyController {
     @Autowired
     private IPandaApplyRoleService iPandaApplyRoleService;
 
+    @Autowired
     private IPandaRoleService iPandaRoleService;
 
     @Autowired
