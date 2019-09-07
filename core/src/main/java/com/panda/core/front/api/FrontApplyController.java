@@ -90,6 +90,7 @@ public class FrontApplyController {
                 List<PandaRoleDto> roles = iPandaRoleService.fillRole(roleIds);
                 Map<Long, PandaRoleDto> roleMap = roles.stream().collect(Collectors.toMap(t -> t.getId(), t -> t));
                 for (PandaApplyRoleDto applyRole : applyRoles) {
+                    applyRole.setApplyStateLabel(SelectItemUtil.getValueById(applyRole.getApplyState(), ApplyState.class));
                     for (Long roleId : applyRole.roleIds()) {
                         applyRole.addRole(roleMap.get(roleId));
                     }
