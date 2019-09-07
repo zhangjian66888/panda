@@ -94,6 +94,9 @@ public class FrontApplyController {
                     for (Long roleId : applyRole.roleIds()) {
                         applyRole.addRole(roleMap.get(roleId));
                     }
+                    if (Objects.nonNull(applyRole.getRoles()) && !applyRole.getRoles().isEmpty()){
+                        applyRole.setApplyAppName(applyRole.getRoles().get(0).getAppName());
+                    }
                 }
             }
             return ResultDto.SUCCESS().setData(applyRoles);
