@@ -58,6 +58,7 @@ public class ResourceHandler {
                     .collect(Collectors.groupingBy(t -> t.getAppCode(), Collectors.mapping(t -> t.getId(), Collectors.toList())));
             PandaApplyDto apply = PandaApplyDto.builder()
                     .applicantId(user.getUserId())
+                    .applicant(user.getZhName())
                     .applyState(ApplyState.SUBMIT.getId())
                     .applyType(ApplyType.ROLE.getId())
                     .build();
@@ -66,6 +67,7 @@ public class ResourceHandler {
                     .map(t -> PandaApplyRoleDto.builder()
                             .applyId(apply.getId())
                             .applicantId(user.getUserId())
+                            .applicant(user.getZhName())
                             .applyAppCode(t.getKey())
                             .applyContent(JSON.toJSONString(t.getValue()))
                             .applyState(ApplyState.SUBMIT.getId())

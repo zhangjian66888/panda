@@ -28,6 +28,8 @@ public class PandaApplyRole extends BaseEntity {
 
     private Long applicantId;
 
+    private String applicant;
+
     private Long applyAppCode;
 
     private Integer applyState;
@@ -35,6 +37,8 @@ public class PandaApplyRole extends BaseEntity {
     private String applyContent;
 
     private Long approverId;
+
+    private String approver;
 
     private LocalDateTime approveTime;
 

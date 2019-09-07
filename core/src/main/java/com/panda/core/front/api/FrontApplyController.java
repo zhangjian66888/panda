@@ -7,13 +7,18 @@ import com.panda.common.enums.ApplyType;
 import com.panda.common.util.SelectItemUtil;
 import com.panda.core.consts.CoreConst;
 import com.panda.core.dto.PandaApplyDto;
+import com.panda.core.dto.PandaApplyRoleDto;
+import com.panda.core.dto.PandaRoleDto;
 import com.panda.core.dto.search.PandaApplySo;
 import com.panda.core.front.dto.search.FrontApplySo;
 import com.panda.core.handler.ApplyHandler;
 import com.panda.core.security.SecurityUser;
 import com.panda.core.security.SecurityUserContext;
+import com.panda.core.service.IPandaApplyRoleService;
 import com.panda.core.service.IPandaApplyService;
+import com.panda.core.service.IPandaRoleService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -22,7 +27,11 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 import reactor.core.publisher.Mono;
 
+import java.util.List;
+import java.util.Map;
 import java.util.Objects;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 /**
  * com.panda.core.front.api.FrontApplyController
@@ -38,6 +47,11 @@ public class FrontApplyController {
 
     @Autowired
     private IPandaApplyService iPandaApplyService;
+
+    @Autowired
+    private IPandaApplyRoleService iPandaApplyRoleService;
+
+    private IPandaRoleService iPandaRoleService;
 
     @Autowired
     private ApplyHandler applyHandler;
@@ -61,6 +75,26 @@ public class FrontApplyController {
                 }
             }
             return ResultDto.SUCCESS().setData(pageDto);
+        });
+    }
+
+    @GetMapping("detail")
+    public Mono<ResultDto<List>> search(@RequestParam("id") Long id) {
+        return Mono.fromSupplier(() -> {
+            SecurityUser uer = SecurityUserContext.getContext();
+            List<PandaApplyRoleDto> applyRoles = iPandaApplyRoleService
+                    .find(PandaApplyRoleDto.builder().applyId(id).applicantId(uer.getUserId()).build());
+            if (Objects.nonNull(applyRoles) && !applyRoles.isEmpty()) {
+                Set<Long> roleIds = applyRoles.stream().flatMap(t -> t.roleIds().stream()).collect(Collectors.toSet());
+                List<PandaRoleDto> roles = iPandaRoleService.fillRole(roleIds);
+                Map<Long, PandaRoleDto> roleMap = roles.stream().collect(Collectors.toMap(t -> t.getId(), t -> t));
+                for (PandaApplyRoleDto applyRole : applyRoles) {
+                    for (Long roleId : applyRole.roleIds()) {
+                        applyRole.addRole(roleMap.get(roleId));
+                    }
+                }
+            }
+            return ResultDto.SUCCESS().setData(applyRoles);
         });
     }
 

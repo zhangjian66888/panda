@@ -22,6 +22,8 @@ public class PandaApplyDto extends BaseDto {
 
     private Long applicantId;
 
+    private String applicant;
+
     private Integer applyType;
     private String applyTypeLabel;
 

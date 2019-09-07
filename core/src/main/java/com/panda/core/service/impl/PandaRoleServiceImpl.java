@@ -5,6 +5,9 @@ import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
 import com.panda.common.enums.DelState;
 import com.panda.common.exception.PandaException;
+import com.panda.core.dto.PandaAppDto;
+import com.panda.core.dto.PandaBusinessLineDto;
+import com.panda.core.dto.PandaEnvDto;
 import com.panda.core.dto.PandaRoleDto;
 import com.panda.core.dto.PandaRolePermissionDto;
 import com.panda.core.dto.search.PandaRoleSo;
@@ -12,13 +15,19 @@ import com.panda.core.entity.PandaRole;
 import com.panda.core.entity.PandaRolePermission;
 import com.panda.core.mapper.PandaRoleMapper;
 import com.panda.core.mapper.PandaRolePermissionMapper;
+import com.panda.core.service.IPandaAppService;
+import com.panda.core.service.IPandaBusinessLineService;
+import com.panda.core.service.IPandaEnvService;
 import com.panda.core.service.IPandaRoleService;
-import org.checkerframework.checker.units.qual.A;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
-import java.util.*;
+import java.util.List;
+import java.util.Map;
+import java.util.Objects;
+import java.util.Optional;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 /**
@@ -33,6 +42,16 @@ import java.util.stream.Collectors;
 public class PandaRoleServiceImpl
         extends BaseServiceImpl<PandaRoleMapper, PandaRole, PandaRoleDto, PandaRoleSo>
         implements IPandaRoleService {
+
+
+    @Autowired
+    private IPandaBusinessLineService iPandaBusinessLineService;
+
+    @Autowired
+    private IPandaAppService iPandaAppService;
+
+    @Autowired
+    private IPandaEnvService iPandaEnvService;
 
     @Autowired
     private PandaRolePermissionMapper pandaRolePermissionMapper;
@@ -151,5 +170,41 @@ public class PandaRoleServiceImpl
         List<PandaRole> list = pandaRoleMapper.selectList(queryWrapper);
         return Optional.ofNullable(list).orElse(Lists.newArrayList()).stream()
                 .map(t -> t.getId()).collect(Collectors.toSet());
+    }
+
+    @Override
+    public List<PandaRoleDto> fillRole(Set<Long> roleIds){
+        List<PandaRoleDto> roleDtos = findListByIds(roleIds);
+        Set<Long> lines = Sets.newHashSet();
+        Set<Long> envCodes = Sets.newHashSet();
+        Set<Long> appCodes = Sets.newHashSet();
+        for (PandaRoleDto roleDto : roleDtos) {
+            lines.add(roleDto.getBusinessLineId());
+            envCodes.add(roleDto.getEnvCode());
+            appCodes.add(roleDto.getAppCode());
+        }
+        Map<Long, PandaBusinessLineDto> lineMap = Optional.ofNullable(iPandaBusinessLineService.findListByIds(lines))
+                .orElse(Lists.newArrayList())
+                .stream().collect(Collectors.toMap(t -> t.getId(), t -> t));
+
+        Map<Long, PandaEnvDto> envMap = Optional.ofNullable(iPandaEnvService.find(new PandaEnvDto() {{
+            in("env_code", envCodes);
+        }})).orElse(Lists.newArrayList()).stream().collect(Collectors.toMap(t -> t.getEnvCode(), t -> t));
+
+        Map<Long, PandaAppDto> appMap = Optional.ofNullable(iPandaAppService.find(new PandaAppDto() {{
+            in("app_code", appCodes);
+        }})).orElse(Lists.newArrayList()).stream().collect(Collectors.toMap(t -> t.getAppCode(), t -> t));
+
+        for (PandaRoleDto roleDto : roleDtos) {
+            roleDto.setBusinessLineName(Optional.ofNullable(lineMap.get(roleDto.getBusinessLineId()))
+                    .map(t -> t.getBusinessLineName()).orElse("" + roleDto.getBusinessLineId()));
+
+            roleDto.setEnvName(Optional.ofNullable(envMap.get(roleDto.getEnvCode()))
+                    .map(t -> t.getEnvName()).orElse("" + roleDto.getEnvCode()));
+
+            roleDto.setAppName(Optional.ofNullable(appMap.get(roleDto.getAppCode())).map(t -> t.getAppName())
+                    .orElse("" + roleDto.getAppCode()));
+        }
+        return roleDtos;
     }
 }

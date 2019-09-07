@@ -1,16 +1,13 @@
 package com.panda.core.handler;
 
-import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
 import com.panda.common.enums.AppOwnerType;
 import com.panda.common.exception.LoginException;
 import com.panda.common.exception.PandaException;
 import com.panda.common.security.PasswordEncoder;
 import com.panda.core.config.ConfigProperties;
-import com.panda.core.dto.PandaAppDto;
 import com.panda.core.dto.PandaAppOwnerDto;
 import com.panda.core.dto.PandaBusinessLineDto;
-import com.panda.core.dto.PandaEnvDto;
 import com.panda.core.dto.PandaGroupDto;
 import com.panda.core.dto.PandaGroupUserDto;
 import com.panda.core.dto.PandaRoleDto;
@@ -33,7 +30,6 @@ import org.springframework.stereotype.Component;
 import javax.servlet.http.HttpServletResponse;
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.Set;
@@ -150,37 +146,7 @@ public class UserHandler {
         Set<Long> roleIds = Sets.newHashSet();
         roleIds.addAll(userRoleIds);
         roleIds.addAll(groupRoleIds);
-        List<PandaRoleDto> roleDtos = iPandaRoleService.findListByIds(roleIds);
-        Set<Long> lines = Sets.newHashSet();
-        Set<Long> envCodes = Sets.newHashSet();
-        Set<Long> appCodes = Sets.newHashSet();
-        for (PandaRoleDto roleDto : roleDtos) {
-            lines.add(roleDto.getBusinessLineId());
-            envCodes.add(roleDto.getEnvCode());
-            appCodes.add(roleDto.getAppCode());
-        }
-        Map<Long, PandaBusinessLineDto> lineMap = Optional.ofNullable(iPandaBusinessLineService.findListByIds(lines))
-                .orElse(Lists.newArrayList())
-                .stream().collect(Collectors.toMap(t -> t.getId(), t -> t));
-
-        Map<Long, PandaEnvDto> envMap = Optional.ofNullable(iPandaEnvService.find(new PandaEnvDto() {{
-            in("env_code", envCodes);
-        }})).orElse(Lists.newArrayList()).stream().collect(Collectors.toMap(t -> t.getEnvCode(), t -> t));
-
-        Map<Long, PandaAppDto> appMap = Optional.ofNullable(iPandaAppService.find(new PandaAppDto() {{
-            in("app_code", appCodes);
-        }})).orElse(Lists.newArrayList()).stream().collect(Collectors.toMap(t -> t.getAppCode(), t -> t));
-
-        for (PandaRoleDto roleDto : roleDtos) {
-            roleDto.setBusinessLineName(Optional.ofNullable(lineMap.get(roleDto.getBusinessLineId()))
-                    .map(t -> t.getBusinessLineName()).orElse("" + roleDto.getBusinessLineId()));
-
-            roleDto.setEnvName(Optional.ofNullable(envMap.get(roleDto.getEnvCode()))
-                    .map(t -> t.getEnvName()).orElse("" + roleDto.getEnvCode()));
-
-            roleDto.setAppName(Optional.ofNullable(appMap.get(roleDto.getAppCode())).map(t -> t.getAppName())
-                    .orElse("" + roleDto.getAppCode()));
-        }
+        List<PandaRoleDto> roleDtos = iPandaRoleService.fillRole(roleIds);
         return roleDtos;
     }
 

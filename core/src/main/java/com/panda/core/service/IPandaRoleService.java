@@ -5,7 +5,6 @@ import com.panda.core.dto.PandaRolePermissionDto;
 import com.panda.core.dto.search.PandaRoleSo;
 import com.panda.core.entity.PandaRole;
 
-import java.util.Collection;
 import java.util.List;
 import java.util.Set;
 
@@ -34,4 +33,6 @@ public interface IPandaRoleService extends IBaseService<PandaRole, PandaRoleDto,
     int deletePermission(PandaRolePermissionDto dto);
 
     Set<Long> roleIds(List<Long> envCodes, Long appCode);
+
+    List<PandaRoleDto> fillRole(Set<Long> roleIds);
 }
