@@ -68,7 +68,7 @@ public class ResourceHandler {
                             .applyId(apply.getId())
                             .applicantId(user.getUserId())
                             .applicant(user.getZhName())
-                            .applyAppCode(t.getKey())
+                            .appCode(t.getKey())
                             .applyContent(JSON.toJSONString(t.getValue()))
                             .applyState(ApplyState.SUBMIT.getId())
                             .build()).collect(Collectors.toList());
