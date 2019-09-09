@@ -2,6 +2,7 @@ package com.panda.core.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.google.common.collect.Lists;
+import com.panda.common.enums.AppOwnerType;
 import com.panda.common.enums.CodeType;
 import com.panda.common.enums.DelState;
 import com.panda.common.exception.PandaException;
@@ -192,5 +193,19 @@ public class PandaAppServiceImpl extends BaseServiceImpl<PandaAppMapper, PandaAp
         return Optional.ofNullable(list).orElse(Lists.newArrayList())
                 .stream().map(t -> BeanUtil.transBean(t, PandaAppDto.class))
                 .collect(Collectors.toList());
+    }
+
+    @Override
+    public List<Long> findCodeByOwnerId(AppOwnerType ownerType, Long ownerId) {
+        PandaAppOwner query = new PandaAppOwner();
+        query.setDelState(DelState.NO.getId());
+        query.setOwnerId(ownerId);
+        query.setOwnerType(ownerType.getId());
+        QueryWrapper<PandaAppOwner> queryWrapper = new QueryWrapper<>(query);
+        queryWrapper.select("app_code");
+        queryWrapper.nonEmptyOfEntity();
+        List<PandaAppOwner> list = pandaAppOwnerMapper.selectList(queryWrapper);
+        return Optional.ofNullable(list).orElse(Lists.newArrayList()).stream()
+                .map(t -> t.getAppCode()).collect(Collectors.toList());
     }
 }

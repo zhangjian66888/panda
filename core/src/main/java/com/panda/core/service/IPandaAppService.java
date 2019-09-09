@@ -1,5 +1,6 @@
 package com.panda.core.service;
 
+import com.panda.common.enums.AppOwnerType;
 import com.panda.core.dto.PandaAppDto;
 import com.panda.core.dto.PandaAppOwnerDto;
 import com.panda.core.dto.PandaAppSecretDto;
@@ -34,5 +35,7 @@ public interface IPandaAppService extends IBaseService<PandaApp, PandaAppDto, Pa
     PandaAppOwnerDto findByAppCodeOwnerId(Long appCode, Long ownerId);
 
     List<PandaAppDto> listByCodes(List<Long> codes);
+
+    List<Long> findCodeByOwnerId(AppOwnerType ownerType, Long ownerId);
 
 }
