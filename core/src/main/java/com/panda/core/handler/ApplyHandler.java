@@ -123,9 +123,9 @@ public class ApplyHandler {
         ApplyState state = ApplyState.PASS;
         if (Objects.nonNull(map.get(ApplyState.SUBMIT.getId()))) {
             state = ApplyState.DOING;
-        } else if (Objects.nonNull(map.get(ApplyState.PASS)) && Objects.nonNull(map.get(ApplyState.BACK))) {
+        } else if (Objects.nonNull(map.get(ApplyState.PASS.getId())) && Objects.nonNull(map.get(ApplyState.BACK.getId()))) {
             state = ApplyState.PB;
-        } else if (Objects.isNull(map.get(ApplyState.PASS)) && Objects.nonNull(map.get(ApplyState.BACK))) {
+        } else if (Objects.isNull(map.get(ApplyState.PASS.getId())) && Objects.nonNull(map.get(ApplyState.BACK.getId()))) {
             state = ApplyState.BACK;
         } else {
             state = ApplyState.PASS;
