@@ -30,4 +30,6 @@ public interface IPandaUserService extends IBaseService<PandaUser, PandaUserDto,
 
     int resetPasswd(Long id);
 
+    int batchSaveRole(Long userId, List<Long> roleIds);
+
 }

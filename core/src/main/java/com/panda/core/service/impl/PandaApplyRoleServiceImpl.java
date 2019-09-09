@@ -51,6 +51,16 @@ public class PandaApplyRoleServiceImpl
         return stateByApplyId(applyId, ApplyState.CANCEL, Lists.newArrayList(ApplyState.SUBMIT, ApplyState.DOING));
     }
 
+    @Override
+    public int approvalById(Long id, ApplyState applyState) {
+        LocalDateTime now = LocalDateTime.now();
+        PandaApplyRole update = new PandaApplyRole();
+        update.setId(id);
+        update.setApplyState(applyState.getId());
+        update.setUpdateTime(now);
+        return pandaApplyRoleMapper.updateById(update);
+    }
+
     private int stateByApplyId(Long applyId, ApplyState applyState, List<ApplyState> applyStates) {
         LocalDateTime now = LocalDateTime.now();
         PandaApplyRole update = new PandaApplyRole() {{

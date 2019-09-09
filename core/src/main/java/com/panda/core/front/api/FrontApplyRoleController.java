@@ -17,7 +17,9 @@ import com.panda.core.consts.CoreConst;
 import com.panda.core.dto.PandaApplyRoleDto;
 import com.panda.core.dto.PandaRoleDto;
 import com.panda.core.dto.search.PandaApplyRoleSo;
+import com.panda.core.front.dto.FrontApprovalDto;
 import com.panda.core.front.dto.search.FrontApplyRoleSo;
+import com.panda.core.handler.ApplyHandler;
 import com.panda.core.security.SecurityUser;
 import com.panda.core.security.SecurityUserContext;
 import com.panda.core.service.IPandaAppService;
@@ -48,6 +50,9 @@ public class FrontApplyRoleController {
 
     @Autowired
     private IPandaAppService iPandaAppService;
+
+    @Autowired
+    private ApplyHandler applyHandler;
 
     @PostMapping("search")
     public Mono<ResultDto<PageDto<PandaApplyRoleDto>>> search(@RequestBody FrontApplyRoleSo search) {
@@ -82,6 +87,15 @@ public class FrontApplyRoleController {
                 }
             }
             return ResultDto.SUCCESS().setData(pageDto);
+        });
+    }
+
+
+    @PostMapping("approval")
+    public Mono<ResultDto> approval(@RequestBody FrontApprovalDto approvalDto) {
+        return Mono.fromSupplier(() -> {
+            applyHandler.approvalRole(approvalDto);
+            return ResultDto.SUCCESS();
         });
     }
 }

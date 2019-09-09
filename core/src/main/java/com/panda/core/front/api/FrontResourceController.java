@@ -12,7 +12,7 @@ import com.panda.core.dto.search.PandaEnvSo;
 import com.panda.core.dto.search.PandaRoleSo;
 import com.panda.core.front.dto.FrontApplyRoleDto;
 import com.panda.core.front.dto.search.FrontRoleSo;
-import com.panda.core.handler.ResourceHandler;
+import com.panda.core.handler.ApplyHandler;
 import com.panda.core.service.IPandaAppService;
 import com.panda.core.service.IPandaBusinessLineService;
 import com.panda.core.service.IPandaEnvService;
@@ -53,7 +53,7 @@ public class FrontResourceController {
     private IPandaEnvService iPandaEnvService;
 
     @Autowired
-    private ResourceHandler resourceHandler;
+    private ApplyHandler applyHandler;
 
 
     @PostMapping("search")
@@ -115,7 +115,7 @@ public class FrontResourceController {
     @PostMapping("apply")
     public Mono<ResultDto> apply(@Valid @RequestBody FrontApplyRoleDto roleApplyDto) {
         return Mono.fromSupplier(() -> {
-            resourceHandler.apply(roleApplyDto);
+            applyHandler.applyRole(roleApplyDto);
             return ResultDto.SUCCESS();
         });
     }

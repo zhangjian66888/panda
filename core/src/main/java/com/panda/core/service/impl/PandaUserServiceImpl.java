@@ -14,6 +14,7 @@ import com.panda.core.entity.PandaUser;
 import com.panda.core.entity.PandaUserRole;
 import com.panda.core.mapper.PandaUserMapper;
 import com.panda.core.mapper.PandaUserRoleMapper;
+import com.panda.core.service.IPandaUserRoleService;
 import com.panda.core.service.IPandaUserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -39,6 +40,9 @@ public class PandaUserServiceImpl
 
     @Autowired
     private PandaUserRoleMapper pandaUserRoleMapper;
+
+    @Autowired
+    private IPandaUserRoleService iPandaUserRoleService;
 
     @Autowired
     private PandaUserMapper pandaUserMapper;
@@ -137,5 +141,33 @@ public class PandaUserServiceImpl
         entity.setId(id);
         entity.setUpdateTime(now);
         return pandaUserMapper.updateById(entity);
+    }
+
+    @Override
+    public int batchSaveRole(Long userId, List<Long> roleIds) {
+        if (Objects.isNull(roleIds) && roleIds.isEmpty()) {
+            return 0;
+        }
+        PandaUserRoleDto query = new PandaUserRoleDto();
+        query.setUserId(userId);
+        query.setDelState(DelState.NO.getId());
+        query.in("role_id", roleIds);
+        List<PandaUserRoleDto> entitys = iPandaUserRoleService.find(query);
+        if (Objects.nonNull(entitys) && !entitys.isEmpty()) {
+            for (PandaUserRoleDto entiry : entitys) {
+                roleIds.remove(entiry.getRoleId());
+            }
+        }
+        if (!roleIds.isEmpty()) {
+            List<PandaUserRoleDto> pandaUserRoles = roleIds.stream()
+                    .map(t -> new PandaUserRoleDto() {{
+                        setRoleId(t);
+                        setUserId(userId);
+                    }})
+                    .collect(Collectors.toList());
+
+            iPandaUserRoleService.insertBatch(pandaUserRoles);
+        }
+        return 1;
     }
 }

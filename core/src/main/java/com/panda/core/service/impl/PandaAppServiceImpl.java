@@ -180,7 +180,13 @@ public class PandaAppServiceImpl extends BaseServiceImpl<PandaAppMapper, PandaAp
 
     @Override
     public PandaAppOwnerDto findByAppCodeOwnerId(Long appCode, Long ownerId) {
-        return iPandaAppOwnerService.findOne(PandaAppOwnerDto.builder().appCode(appCode).ownerId(ownerId).build());
+        return findByAppCodeOwnerId(appCode, ownerId, null);
+    }
+
+    @Override
+    public PandaAppOwnerDto findByAppCodeOwnerId(Long appCode, Long ownerId, AppOwnerType ownerType) {
+        return iPandaAppOwnerService.findOne(PandaAppOwnerDto.builder().appCode(appCode).ownerType(ownerType.getId())
+                .ownerId(ownerId).build());
     }
 
     @Override

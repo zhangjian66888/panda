@@ -34,6 +34,8 @@ public interface IPandaAppService extends IBaseService<PandaApp, PandaAppDto, Pa
 
     PandaAppOwnerDto findByAppCodeOwnerId(Long appCode, Long ownerId);
 
+    PandaAppOwnerDto findByAppCodeOwnerId(Long appCode, Long ownerId, AppOwnerType ownerType);
+
     List<PandaAppDto> listByCodes(List<Long> codes);
 
     List<Long> findCodeByOwnerId(AppOwnerType ownerType, Long ownerId);

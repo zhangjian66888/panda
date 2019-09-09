@@ -37,6 +37,11 @@ public class PandaApplyServiceImpl
         return stateById(id, ApplyState.CANCEL, Lists.newArrayList(ApplyState.SUBMIT, ApplyState.DOING));
     }
 
+    @Override
+    public int approvalById(Long id, ApplyState applyState) {
+        return stateById(id, applyState, Lists.newArrayList(ApplyState.SUBMIT, ApplyState.DOING));
+    }
+
     private int stateById(Long id, ApplyState applyState, List<ApplyState> applyStates) {
         LocalDateTime now = LocalDateTime.now();
         PandaApply update = new PandaApply() {{

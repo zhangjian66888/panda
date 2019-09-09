@@ -1,5 +1,6 @@
 package com.panda.core.service;
 
+import com.panda.common.enums.ApplyState;
 import com.panda.core.dto.PandaApplyRoleDto;
 import com.panda.core.dto.search.PandaApplyRoleSo;
 import com.panda.core.entity.PandaApplyRole;
@@ -17,4 +18,6 @@ public interface IPandaApplyRoleService extends IBaseService<PandaApplyRole, Pan
     int deleteByApplyId(Long applyId);
 
     int cancelByApplyId(Long applyId);
+
+   int approvalById(Long id, ApplyState applyState);
 }
