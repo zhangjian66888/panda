@@ -32,8 +32,8 @@ public class PandaApplyRoleDto extends BaseDto {
 
     private String applicant;
 
-    private Long applyAppCode;
-    private String applyAppName;
+    private Long appCode;
+    private String appName;
 
     private Integer applyState;
     private String applyStateLabel;

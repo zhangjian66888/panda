@@ -24,5 +24,5 @@ public class FrontApplySo extends BaseSo {
 
     private List<Integer> applyTypes;
 
-    private List<Integer> applyState;
+    private List<Integer> applyStates;
 }

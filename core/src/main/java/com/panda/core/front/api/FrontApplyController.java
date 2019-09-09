@@ -64,7 +64,7 @@ public class FrontApplyController {
             PandaApplySo so = new PandaApplySo() {{
                 setApplicantId(uer.getUserId());
                 in("apply_type", search.getApplyTypes());
-                in("apply_state", search.getApplyState());
+                in("apply_state", search.getApplyStates());
             }};
 
             PageDto<PandaApplyDto> pageDto = iPandaApplyService.search(so);
@@ -95,7 +95,7 @@ public class FrontApplyController {
                         applyRole.addRole(roleMap.get(roleId));
                     }
                     if (Objects.nonNull(applyRole.getRoles()) && !applyRole.getRoles().isEmpty()){
-                        applyRole.setApplyAppName(applyRole.getRoles().get(0).getAppName());
+                        applyRole.setAppName(applyRole.getRoles().get(0).getAppName());
                     }
                 }
             }

@@ -30,7 +30,7 @@ public class PandaApplyRole extends BaseEntity {
 
     private String applicant;
 
-    private Long applyAppCode;
+    private Long appCode;
 
     private Integer applyState;
 

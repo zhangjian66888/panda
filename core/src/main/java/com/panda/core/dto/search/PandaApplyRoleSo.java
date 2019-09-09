@@ -24,7 +24,7 @@ public class PandaApplyRoleSo extends BaseSo {
 
     private Long applicantId;
 
-    private Long applyAppCode;
+    private Long appCode;
 
     private Integer applyState;
 
